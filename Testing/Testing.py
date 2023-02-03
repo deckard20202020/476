@@ -37,7 +37,21 @@ def print_numbers_min_heap():
     while min_heap:
         print(heapq.heappop(min_heap))
 
+def print_min_heap_with_distance():
+    min_heap = []
+
+    tuples = [((1, 2), 100), ((3, 4), 5), ((5, 6), 1), ((7, 8), 8), ((9, 10), 4)]
+    # for t in tuples:
+    #     heapq.heappush(min_heap, t)
+
+    for t in tuples:
+        heapq.heappush(min_heap, (t[1], t))
+
+    while min_heap:
+        print(heapq.heappop(min_heap))
+
 if __name__ == '__main__':
     print_numbers_with_queue()
     print_numbers_with_stack()
     print_numbers_min_heap()
+    print_min_heap_with_distance()
