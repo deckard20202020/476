@@ -30,7 +30,16 @@ class Grid2DStates(StateSpace):
 
     def __contains__(self, x):
         # TODO: Implement this function
-        raise NotImplementedError
+        if x[0] < self.Xmin or x[0] > self.Xmax or x[1] < self.Ymin or x[1] > self.Ymax:
+            return False
+
+        for obst in self.O:
+            if x[0] == obst[0] and x[1] == obst[1]:
+                return False
+
+        return True
+
+        # raise NotImplementedError
 
     def get_distance_lower_bound(self, x1, x2):
         # TODO: Implement this function
@@ -78,20 +87,33 @@ class Grid2DStates(StateSpace):
 
 
 class GridStateTransition(StateTransition):
+    """gives us only the good moves???"""
     def __call__(self, x, u):
         # TODO: Implement this function
+        """what is u"""
+        # return is u in the state space???
         raise NotImplementedError
 
 
 class Grid2DActions(ActionSpace):
     all_actions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
 
+    """gives us all 4???"""
+
+    """Why does it take in a function"""
     def __init__(self, X, f):
         self.X = X
         self.f = f
 
     def __call__(self, x):
         # TODO: Implement this function
+        neighbors = []
+        for dir in Grid2DActions.all_actions:
+            neighbor = (x[0] + dir[0], x[1] + dir[1])
+            neighbors.append(neighbor)
+
+        return neighbors
+
         raise NotImplementedError
 
 

@@ -1,3 +1,6 @@
+import queue
+from abc import abstractmethod
+
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"
 ALG_ASTAR = "astar"
@@ -42,6 +45,77 @@ class StateTransition:
         """Return the new state obtained by applying action u at state x"""
         raise NotImplementedError
 
+class AbstractQueue:
+    """A base class for a Queue"""
+
+    @abstractmethod
+    def pop(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def insert(self, x, parent):
+        raise NotImplementedError
+
+    @abstractmethod
+    def maintain_parent(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def is_empty(self):
+        raise NotImplementedError
+
+class QueueBFS(AbstractQueue):
+
+    def __int__(self):
+        self.q = queue.Queue()
+        # self.parent_map = {}
+
+    def pop(self):
+        return self.q.get()
+        # x = self.q.get()
+        # return x, self.parent_map[x]
+    """x,y = q.pop()"""
+
+    def insert(self, x, parent):
+        self.q.put((x, parent))
+        # self.parent_map[x] = parent
+
+    def is_empty(self):
+        return self.q.empty()
+
+
+class QueueDFS(AbstractQueue):
+
+    def __init__(self):
+        self.s = queue.LifoQueue()
+        # self.parent_map = {}
+
+    def pop(self):
+        # x = self.s.get()
+        # self.s.get()
+        return self.s.get()
+
+    def insert(self, x, parent):
+        self.s.put((x, parent))
+
+    def is_empty(self):
+        return self.q.empty()
+
+class QueueAstar(AbstractQueue):
+
+    def __init__(self):
+        self.pq = queue.PriorityQueue
+
+    def pop(self):
+        return self.pq.get()
+
+    def insert(self, x, parent):
+        # I need to figure out distance
+        self.pq.put((x, parent))
+
+    def is_empty(self):
+        return self.q.empty()
+
 
 def fsearch(X, U, f, xI, XG, alg):
     """Return the list of visited nodes and a path from xI to XG based on the given algorithm
@@ -59,4 +133,42 @@ def fsearch(X, U, f, xI, XG, alg):
     """
     # TODO: Implement this function
     """will I need a function generateQueue(algo) that generates the type of queue needed for each algo"""
+    # some states in XG may not be in X and XG may be empty
+    # just return the path to the first goal you find
+
+    # get the queue you need
+    if alg == "bfs":
+        q = QueueBFS()
+    elif alg == "dfs":
+        q = QueueDFS
+    else:
+        q = QueueAstar
+
+    # declare a set to keep track of our visited
+    visited = set()
+
+    # put the xI in our queue
+    q.insert(xI, None)
+
+    # while the q is not empty
+    while not q.is_empty():
+        # pop the queue
+        node = q.pop()
+        # mark as visited
+        visited.add(node)
+        # find the neighbors
+        # check if they are in the state space
+        # if they aren't visited'
+        #      'add them to the q'
+
+
+        # add the parent to our neighbors, which is node
+
+        # add them to the queue
+
+
+
+
+
+
     raise NotImplementedError
