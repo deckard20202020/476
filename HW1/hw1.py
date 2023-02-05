@@ -28,6 +28,10 @@ class Grid2DStates(StateSpace):
         self.Ymax = Ymax
         self.O = O
 
+    """returns true if x is in the state space as defined in (3)"""
+    """The state space includes all the grid points that are not 
+    occupied by an obstacle. Formally, the state space is defined as
+    X = W \ O"""
     def __contains__(self, x):
         # TODO: Implement this function
         if x[0] < self.Xmin or x[0] > self.Xmax or x[1] < self.Ymin or x[1] > self.Ymax:
@@ -41,6 +45,11 @@ class Grid2DStates(StateSpace):
 
         # raise NotImplementedError
 
+    """returns the lower bound on the distance between state
+    x1 and x2 based on (6)."""
+    """ The lower bound on
+    the distance between state x1= (x1,1, x1,2) and x2 = (x2,1, x2,2) is given by
+    |x1,1 −x2,1| + |x1,2 −x2,2|"""
     def get_distance_lower_bound(self, x1, x2):
         # TODO: Implement this function
         raise NotImplementedError
@@ -87,7 +96,13 @@ class Grid2DStates(StateSpace):
 
 
 class GridStateTransition(StateTransition):
-    """gives us only the good moves???"""
+    """returns the new state obtained by applying action
+    u at state x based on the state transition function
+    f definedin (5)"""
+    """Here, + is the elementwise addition, i.e.,
+    x + u = (x[0] +u[0], x[1] +u[1]).
+    Finally, the state transition function f:X × U → X
+    is defined as f(x, u) = x + u, ∀x ∈ X, u ∈ U(x)."""
     def __call__(self, x, u):
         # TODO: Implement this function
         """what is u"""
@@ -98,13 +113,14 @@ class GridStateTransition(StateTransition):
 class Grid2DActions(ActionSpace):
     all_actions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
 
-    """gives us all 4???"""
-
-    """Why does it take in a function"""
     def __init__(self, X, f):
         self.X = X
         self.f = f
 
+    """returns the list of all the possible actions
+    for state x based on the action space U(x) defined in (4)"""
+    """The action space for x = (i, j) is defined as
+    U(x) ⊆ U such that x + u ∈ X, ∀u ∈ U(x)."""
     def __call__(self, x):
         # TODO: Implement this function
         neighbors = []
