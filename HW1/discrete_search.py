@@ -132,7 +132,6 @@ def fsearch(X, U, f, xI, XG, alg):
                states visited during the search and path is a path from xI to a state in XG
     """
     # TODO: Implement this function
-    """will I need a function generateQueue(algo) that generates the type of queue needed for each algo"""
     # some states in XG may not be in X and XG may be empty
     # just return the path to the first goal you find
 
@@ -150,21 +149,28 @@ def fsearch(X, U, f, xI, XG, alg):
     # put the xI in our queue
     q.insert(xI, None)
 
+    # mark starting state as visited
+    visited.add(xI)
+
+
     # while the q is not empty
     while not q.is_empty():
+
         # pop the queue
         node = q.pop()
-        # mark as visited
-        visited.add(node)
-        # find the neighbors
-        # check if they are in the state space
-        # if they aren't visited'
-        #      'add them to the q'
 
+        # if node is in the goal state return SUCCESS
 
-        # add the parent to our neighbors, which is node
+        # find the neighbors (u in U(x) x' <- f(x,u)
 
-        # add them to the queue
+        # for each of the neighbors
+            # if x' not visited
+            #     mark it as visited
+            #     insert it in the q
+            # else
+            #     Resolve Duplicate x'
+
+    # return FAILURE
 
 
 
