@@ -1,5 +1,6 @@
 import queue
 from abc import abstractmethod
+from hw1 import Grid2DActions
 
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"
@@ -152,6 +153,8 @@ def fsearch(X, U, f, xI, XG, alg):
     # mark starting state as visited
     visited.add(xI)
 
+    # how are we going to keep track of path???
+    parents = {xI, None}
 
     # while the q is not empty
     while not q.is_empty():
@@ -159,18 +162,39 @@ def fsearch(X, U, f, xI, XG, alg):
         # pop the queue
         node = q.pop()
 
-        # if node is in the goal state return SUCCESS
+        # if node is in the goal state return SUCCESS XG is a list
+        if (node in XG):
+            # we should be returning a list of node we visited
+            visited.add(node)
+
+            # and a path from xI to XG
+            path = []
+            for key in parents.keys():
+                path.append(parents[key])
+
+            return list(visited), path
 
         # find the neighbors (u in U(x) x' <- f(x,u)
+        grid2DActions = Grid2DActions()
+        neighbors = grid2DActions.__call__(node)
 
         # for each of the neighbors
-            # if x' not visited
-            #     mark it as visited
-            #     insert it in the q
+        for neighbor in neighbors:
+            # if neighbor not visited
+            if (neighbor not in visited):
+                # mark it as visited
+                visited.add(neighbor)
+                # insert it in the q
+                q.insert(neighbor, node)
+                # update the parent
+                parents.add(neighbor, node)
             # else
             #     Resolve Duplicate x'
 
     # return FAILURE
+    failureVisited = []
+    failureparents = []
+    return failureVisited, failureparents
 
 
 
