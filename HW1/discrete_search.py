@@ -1,9 +1,8 @@
-import queue
+# import queue
 from abc import abstractmethod
-
-# from HW1.hw1 import Grid2DActions
-
-# from hw1 import Grid2DActions
+from queue import Queue
+from queue import LifoQueue
+from queue import PriorityQueue
 
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"
@@ -25,8 +24,7 @@ class StateSpace:
 
     def __contains__(self, x):
         """Return whether the given state x is in the state space"""
-        return x in self.states
-        """raise NotImplementedError"""
+        raise NotImplementedError
 
     def get_distance_lower_bound(self, x1, x2):
         """Return the lower bound on the distance between the given states x1 and x2"""
@@ -49,29 +47,30 @@ class StateTransition:
         """Return the new state obtained by applying action u at state x"""
         raise NotImplementedError
 
-class AbstractQueue:
-    """A base class for a Queue"""
 
-    @abstractmethod
-    def pop(self):
-        raise NotImplementedError
+# class AbstractQueue:
+#     """A base class for a Queue"""
+#
+#     @abstractmethod
+#     def pop(self):
+#         raise NotImplementedError
+#
+#     @abstractmethod
+#     def insert(self, x):
+#         raise NotImplementedError
+#
+#     # @abstractmethod
+#     # def maintain_parent(self):
+#     #     raise NotImplementedError
+#
+#     @abstractmethod
+#     def is_empty(self):
+#         raise NotImplementedError
 
-    @abstractmethod
-    def insert(self, x, parent):
-        raise NotImplementedError
+class QueueBFS:
 
-    @abstractmethod
-    def maintain_parent(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def is_empty(self):
-        raise NotImplementedError
-
-class QueueBFS(AbstractQueue):
-
-    def __int__(self):
-        self.q = queue.Queue()
+    def __init__(self):
+        self.q = Queue()
         # self.parent_map = {}
 
     def pop(self):
@@ -87,10 +86,10 @@ class QueueBFS(AbstractQueue):
         return self.q.empty()
 
 
-class QueueDFS(AbstractQueue):
+class QueueDFS:
 
     def __init__(self):
-        self.s = queue.LifoQueue()
+        self.s = LifoQueue()
         # self.parent_map = {}
 
     def pop(self):
@@ -105,12 +104,13 @@ class QueueDFS(AbstractQueue):
         self.s.put(x)
 
     def is_empty(self):
-        return self.q.empty()
+        return self.s.empty()
 
-class QueueAstar(AbstractQueue):
+
+class QueueAstar:
 
     def __init__(self):
-        self.pq = queue.PriorityQueue
+        self.pq = PriorityQueue()
 
     def pop(self):
         return self.pq.get()
@@ -124,14 +124,13 @@ class QueueAstar(AbstractQueue):
         self.pq.put(x)
 
     def is_empty(self):
-        return self.q.empty()
+        return self.pq.empty()
 
 
 def reconstructPath(node, parents):
-
     path = []
     currentNode = node
-    while currentNode != None:
+    while currentNode is not None:
         # add the node to the path
         path.append(currentNode)
         currentNode = parents[currentNode]
@@ -159,29 +158,29 @@ def fsearch(X, U, f, xI, XG, alg):
 
     # get the queue you need
     if alg == "bfs":
-        q = QueueBFS()
+        q1 = QueueBFS()
     elif alg == "dfs":
-        q = QueueDFS
+        q1 = QueueDFS()
     else:
-        q = QueueAstar
+        q1 = QueueAstar()
 
     # declare a set to keep track of our visited
     visited = set()
 
     # put the xI in our queue
-    q.insert(xI, None)
+    q1.insert(xI)
 
     # mark starting state as visited
     visited.add(xI)
 
     # how are we going to keep track of path???
-    parents = {xI, None}
+    parents = {xI: None}
 
     # while the q is not empty
-    while not q.is_empty():
+    while not q1.is_empty():
 
         # pop the queue
-        node = q.pop()
+        node = q1.pop()
 
         # if node is in the goal state return SUCCESS XG is a list
         if (node in XG):
@@ -191,13 +190,10 @@ def fsearch(X, U, f, xI, XG, alg):
             # and a path from xI to XG
             path = reconstructPath(node, parents)
 
-            return list(visited), path
+            return {"visited": list(visited), "path": path}
 
         # find the neighbors (u in U(x) x' <- f(x,u)
-        # grid2DActions = Grid2DActions()
-        # neighbors = grid2DActions.__call__(node)
-        # neighbors = GRID2DACTIONS.__call__(node)
-        neighbors = []
+        neighbors = U(node)
 
         # for each of the neighbors
         for neighbor in neighbors:
@@ -206,9 +202,9 @@ def fsearch(X, U, f, xI, XG, alg):
                 # mark it as visited
                 visited.add(neighbor)
                 # insert it in the q
-                q.insert(neighbor, node)
+                q1.insert(neighbor)
                 # update the parent
-                parents.add(neighbor, node)
+                parents[neighbor] = node
             # else
             #     Resolve Duplicate x'
 
@@ -217,9 +213,4 @@ def fsearch(X, U, f, xI, XG, alg):
     failureparents = []
     return failureVisited, failureparents
 
-
-
-
-
-
-    raise NotImplementedError
+    # raise NotImplementedError

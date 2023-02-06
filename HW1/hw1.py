@@ -132,9 +132,11 @@ class Grid2DActions(ActionSpace):
         # for each direction
         for dir in Grid2DActions.all_actions:
             # make a new tuple by calling 106
-            possibleNeighbor = GridStateTransition.__call__(x, dir)
+            possibleNeighbor = self.f(x, dir)
+            # possibleNeighbor = GridStateTransition.__call__(x, dir)
         #   if the new tuple is in the action space by calling 35
-            if (Grid2DStates.__contains__(possibleNeighbor)):
+            if (possibleNeighbor in self.X):
+        #     if (Grid2DStates.__contains__(possibleNeighbor)):
         #       add it to our return list
                 neighbors.append(possibleNeighbor)
         # return our list
