@@ -48,10 +48,13 @@ class Grid2DStates(StateSpace):
     """returns the lower bound on the distance between state
     x1 and x2 based on (6)."""
     """ The lower bound on
-    the distance between state x1= (x1,1, x1,2) and x2 = (x2,1, x2,2) is given by
-    |x1,1 −x2,1| + |x1,2 −x2,2|"""
+    the distance between state x1= (x1,1, x1,2) and x2 = (x2,1, x2,2) 
+    is given by |x1,1 −x2,1| + |x1,2 −x2,2|"""
     def get_distance_lower_bound(self, x1, x2):
         # TODO: Implement this function
+        xVal = abs(x1[0] - x2[0])
+        yVal = abs(x1[1] - x2[1])
+        return xVal + yVal
         raise NotImplementedError
 
     def draw(self, ax, grid_on=True, tick_step=[1, 1]):
@@ -98,15 +101,15 @@ class Grid2DStates(StateSpace):
 class GridStateTransition(StateTransition):
     """returns the new state obtained by applying action
     u at state x based on the state transition function
-    f definedin (5)"""
+    f defined in (5)"""
     """Here, + is the elementwise addition, i.e.,
     x + u = (x[0] +u[0], x[1] +u[1]).
     Finally, the state transition function f:X × U → X
     is defined as f(x, u) = x + u, ∀x ∈ X, u ∈ U(x)."""
     def __call__(self, x, u):
         # TODO: Implement this function
-        """what is u"""
-        # return is u in the state space???
+        """I think here we just add the tuples together"""
+        return tuple(x + y for x, y in zip(x, u))
         raise NotImplementedError
 
 
@@ -123,11 +126,18 @@ class Grid2DActions(ActionSpace):
     U(x) ⊆ U such that x + u ∈ X, ∀u ∈ U(x)."""
     def __call__(self, x):
         # TODO: Implement this function
-        neighbors = []
-        for dir in Grid2DActions.all_actions:
-            neighbor = (x[0] + dir[0], x[1] + dir[1])
-            neighbors.append(neighbor)
 
+        neighbors = []
+
+        # for each direction
+        for dir in Grid2DActions.all_actions:
+            # make a new tuple by calling 106
+            possibleNeighbor = GridStateTransition.__call__(x, dir)
+        #   if the new tuple is in the action space by calling 35
+            if (Grid2DStates.__contains__(possibleNeighbor)):
+        #       add it to our return list
+                neighbors.append(possibleNeighbor)
+        # return our list
         return neighbors
 
         raise NotImplementedError
