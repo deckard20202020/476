@@ -50,8 +50,19 @@ def print_min_heap_with_distance():
     while min_heap:
         print(heapq.heappop(min_heap))
 
+def add_tuples(x, u):
+    print(tuple(x + y for x, y in zip(x, u)))
+
 if __name__ == '__main__':
     print_numbers_with_queue()
     print_numbers_with_stack()
     print_numbers_min_heap()
     print_min_heap_with_distance()
+    t1 = (1,2)
+    t2 = (1, 2)
+    t3 = (1, 2, 3)
+    t4 = (1, 2, 3)
+    add_tuples(t1, t2)
+    add_tuples(t3, t4)
+    
+
