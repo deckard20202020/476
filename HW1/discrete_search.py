@@ -1,6 +1,9 @@
 import queue
 from abc import abstractmethod
-from hw1 import Grid2DActions
+
+# from HW1.hw1 import Grid2DActions
+
+# from hw1 import Grid2DActions
 
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"
@@ -73,13 +76,12 @@ class QueueBFS(AbstractQueue):
 
     def pop(self):
         return self.q.get()
-        # x = self.q.get()
-        # return x, self.parent_map[x]
-    """x,y = q.pop()"""
 
-    def insert(self, x, parent):
-        self.q.put((x, parent))
-        # self.parent_map[x] = parent
+    # def insert(self, x, parent):
+    #     self.q.put((x, parent))
+
+    def insert(self, x):
+        self.q.put(x)
 
     def is_empty(self):
         return self.q.empty()
@@ -96,8 +98,11 @@ class QueueDFS(AbstractQueue):
         # self.s.get()
         return self.s.get()
 
-    def insert(self, x, parent):
-        self.s.put((x, parent))
+    # def insert(self, x, parent):
+    #     self.s.put((x, parent))
+
+    def insert(self, x):
+        self.s.put(x)
 
     def is_empty(self):
         return self.q.empty()
@@ -110,12 +115,28 @@ class QueueAstar(AbstractQueue):
     def pop(self):
         return self.pq.get()
 
-    def insert(self, x, parent):
+    # def insert(self, x, parent):
+    #     # I need to figure out distance
+    #     self.pq.put((x, parent))
+
+    def insert(self, x):
         # I need to figure out distance
-        self.pq.put((x, parent))
+        self.pq.put(x)
 
     def is_empty(self):
         return self.q.empty()
+
+
+def reconstructPath(node, parents):
+
+    path = []
+    currentNode = node
+    while currentNode != None:
+        # add the node to the path
+        path.append(currentNode)
+        currentNode = parents[currentNode]
+
+    return path
 
 
 def fsearch(X, U, f, xI, XG, alg):
@@ -168,15 +189,15 @@ def fsearch(X, U, f, xI, XG, alg):
             visited.add(node)
 
             # and a path from xI to XG
-            path = []
-            for key in parents.keys():
-                path.append(parents[key])
+            path = reconstructPath(node, parents)
 
             return list(visited), path
 
         # find the neighbors (u in U(x) x' <- f(x,u)
-        grid2DActions = Grid2DActions()
-        neighbors = grid2DActions.__call__(node)
+        # grid2DActions = Grid2DActions()
+        # neighbors = grid2DActions.__call__(node)
+        # neighbors = GRID2DACTIONS.__call__(node)
+        neighbors = []
 
         # for each of the neighbors
         for neighbor in neighbors:
