@@ -4,7 +4,6 @@ ALG_BFS = "bfs"
 ALG_DFS = "dfs"
 ALG_ASTAR = "astar"
 
-
 class StateSpace:
     """A base class to specify a state space X"""
 
@@ -75,10 +74,12 @@ def fsearch(X, U, f, xI, XG, alg):
     elif alg == "dfs":
         q1 = QueueDFS()
     else:
-        q1 = QueueAstar()
+        q1 = QueueAstar(XG, X)
 
     # declare a set to keep track of our visited
     # visited = set()
+    # a set would be faster for contains()
+    # but we need to use a list for grading
     visited = []
 
     # put the xI in our queue
@@ -86,9 +87,11 @@ def fsearch(X, U, f, xI, XG, alg):
 
     # mark starting state as visited
     # visited.add(xI)
+    # a set would be faster for contains()
+    # but we need to use a list for grading
     visited.append(xI)
 
-    # how are we going to keep track of path???
+    # dict to keep track of path???
     parents = {xI: None}
 
     # while the q is not empty
@@ -100,8 +103,6 @@ def fsearch(X, U, f, xI, XG, alg):
         # if node is in the goal state return SUCCESS XG is a list
         if (node in XG):
             # we should be returning a list of node we visited
-            # visited.add(node)
-            # visited.append(node)
 
             # and a path from xI to XG
             path = reconstructPath(node, parents)
