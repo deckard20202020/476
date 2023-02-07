@@ -1,8 +1,7 @@
 # import queue
 from abc import abstractmethod
-from queue import Queue
-from queue import LifoQueue
-from queue import PriorityQueue
+
+from HW1.data_structures import QueueBFS, QueueDFS, QueueAstar
 
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"
@@ -67,64 +66,7 @@ class StateTransition:
 #     def is_empty(self):
 #         raise NotImplementedError
 
-class QueueBFS:
 
-    def __init__(self):
-        self.q = Queue()
-        # self.parent_map = {}
-
-    def pop(self):
-        return self.q.get()
-
-    # def insert(self, x, parent):
-    #     self.q.put((x, parent))
-
-    def insert(self, x):
-        self.q.put(x)
-
-    def is_empty(self):
-        return self.q.empty()
-
-
-class QueueDFS:
-
-    def __init__(self):
-        self.s = LifoQueue()
-        # self.parent_map = {}
-
-    def pop(self):
-        # x = self.s.get()
-        # self.s.get()
-        return self.s.get()
-
-    # def insert(self, x, parent):
-    #     self.s.put((x, parent))
-
-    def insert(self, x):
-        self.s.put(x)
-
-    def is_empty(self):
-        return self.s.empty()
-
-
-class QueueAstar:
-
-    def __init__(self):
-        self.pq = PriorityQueue()
-
-    def pop(self):
-        return self.pq.get()
-
-    # def insert(self, x, parent):
-    #     # I need to figure out distance
-    #     self.pq.put((x, parent))
-
-    def insert(self, x):
-        # I need to figure out distance
-        self.pq.put(x)
-
-    def is_empty(self):
-        return self.pq.empty()
 
 
 def reconstructPath(node, parents):
@@ -134,6 +76,8 @@ def reconstructPath(node, parents):
         # add the node to the path
         path.append(currentNode)
         currentNode = parents[currentNode]
+
+    path.reverse()
 
     return path
 
@@ -165,13 +109,15 @@ def fsearch(X, U, f, xI, XG, alg):
         q1 = QueueAstar()
 
     # declare a set to keep track of our visited
-    visited = set()
+    # visited = set()
+    visited = []
 
     # put the xI in our queue
     q1.insert(xI)
 
     # mark starting state as visited
-    visited.add(xI)
+    # visited.add(xI)
+    visited.append(xI)
 
     # how are we going to keep track of path???
     parents = {xI: None}
@@ -185,7 +131,8 @@ def fsearch(X, U, f, xI, XG, alg):
         # if node is in the goal state return SUCCESS XG is a list
         if (node in XG):
             # we should be returning a list of node we visited
-            visited.add(node)
+            # visited.add(node)
+            # visited.append(node)
 
             # and a path from xI to XG
             path = reconstructPath(node, parents)
@@ -200,7 +147,8 @@ def fsearch(X, U, f, xI, XG, alg):
             # if neighbor not visited
             if (neighbor not in visited):
                 # mark it as visited
-                visited.add(neighbor)
+                # visited.add(neighbor)
+                visited.append(neighbor)
                 # insert it in the q
                 q1.insert(neighbor)
                 # update the parent
