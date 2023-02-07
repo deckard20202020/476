@@ -41,14 +41,32 @@ class QueueDFS:
     def is_empty(self):
         return self.s.empty()
 
+# returns the cost to go
+def findManDist(x, goals, stateSpace):
+    dist = 0;
+    for goal in goals:
+        # xdist = abs(x[0] - goal[0])
+        # ydist = abs(x[1] - goal[1])
+        # totalDist = xdist + ydist
+        # dist = min(dist, totalDist)
+
+        lowerBound = stateSpace.get_distance_lower_bound(x,goal)
+        dist = min(dist, lowerBound)
+
+    return dist
+
 
 class QueueAstar:
 
-    def __init__(self):
+    def __init__(self, Goals, StateSpace):
         self.pq = PriorityQueue()
+        self.goals = Goals
+        self.stateSpace = StateSpace
 
     def pop(self):
-        return self.pq.get()
+        tuple = self.pq.get()[0]
+        return tuple
+        # return self.pq.get()
 
     # def insert(self, x, parent):
     #     # I need to figure out distance
@@ -57,7 +75,13 @@ class QueueAstar:
     def insert(self, x):
         # I need to figure out distance
 
-        self.pq.put(x)
+        # cost to go is manhattan distance
+        manDist = findManDist(x, self.goals, self.stateSpace)
+
+        # how to figure out cost to come???
+
+
+        self.pq.put((x, manDist))
 
     def is_empty(self):
         return self.pq.empty()

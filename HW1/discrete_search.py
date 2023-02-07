@@ -1,6 +1,3 @@
-# import queue
-from abc import abstractmethod
-
 from HW1.data_structures import QueueBFS, QueueDFS, QueueAstar
 
 ALG_BFS = "bfs"
@@ -10,11 +7,6 @@ ALG_ASTAR = "astar"
 
 class StateSpace:
     """A base class to specify a state space X"""
-    """a list or set of goal states"""
-    """initial state is a tuple"""
-    """will we need a new class to represent a state?"""
-    """a set or list of states"""
-    """needs to be able to be searched quickly for contains method"""
 
     def __init__(self, initial_state, goal_states, states):
         self.initial_state = initial_state
@@ -32,7 +24,6 @@ class StateSpace:
 
 class ActionSpace:
     """A base class to specify an action space"""
-    """A set of all actions"""
 
     def __call__(self, x):
         """ Return the list of all the possible actions at the given state x"""
@@ -45,28 +36,6 @@ class StateTransition:
     def __call__(self, x, u):
         """Return the new state obtained by applying action u at state x"""
         raise NotImplementedError
-
-
-# class AbstractQueue:
-#     """A base class for a Queue"""
-#
-#     @abstractmethod
-#     def pop(self):
-#         raise NotImplementedError
-#
-#     @abstractmethod
-#     def insert(self, x):
-#         raise NotImplementedError
-#
-#     # @abstractmethod
-#     # def maintain_parent(self):
-#     #     raise NotImplementedError
-#
-#     @abstractmethod
-#     def is_empty(self):
-#         raise NotImplementedError
-
-
 
 
 def reconstructPath(node, parents):
