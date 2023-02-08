@@ -74,7 +74,7 @@ def fsearch(X, U, f, xI, XG, alg):
     elif alg == "dfs":
         q1 = QueueDFS()
     else:
-        q1 = QueueAstar(XG, X)
+        q1 = QueueAstar(XG, X, xI)
 
     # declare a set to keep track of our visited
     # visited = set()
@@ -83,7 +83,7 @@ def fsearch(X, U, f, xI, XG, alg):
     visited = []
 
     # put the xI in our queue
-    q1.insert(xI)
+    q1.insert(xI, None)
 
     # mark starting state as visited
     # visited.add(xI)
@@ -91,7 +91,7 @@ def fsearch(X, U, f, xI, XG, alg):
     # but we need to use a list for grading
     visited.append(xI)
 
-    # dict to keep track of path???
+    # # dict to keep track of path
     parents = {xI: None}
 
     # while the q is not empty
@@ -120,15 +120,15 @@ def fsearch(X, U, f, xI, XG, alg):
                 # visited.add(neighbor)
                 visited.append(neighbor)
                 # insert it in the q
-                q1.insert(neighbor)
+                q1.insert(neighbor, node)
                 # update the parent
                 parents[neighbor] = node
-            # else
+            # else:
             #     Resolve Duplicate x'
+            # we need to update our priority queue
+            #     q1.updateQueue(neighbor, node)
 
     # return FAILURE
-    failureVisited = []
-    failureparents = []
-    return failureVisited, failureparents
+    return {"visited": list(visited), "path": {}}
 
     # raise NotImplementedError
