@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # print_numbers_with_queue()
     # print_numbers_with_stack()
     # print_numbers_min_heap()
-    # print_min_heap_with_distance()
+    print_min_heap_with_distance()
     # t1 = (1,2)
     # t2 = (1, 2)
     # t3 = (1, 2, 3)
@@ -65,29 +65,29 @@ if __name__ == '__main__':
     # add_tuples(t1, t2)
     # add_tuples(t3, t4)
 
-    q = queue.Queue();
-    q.put((1,1))
-    q.put((1,2))
-    q.put((1,3))
-    while not q.empty():
-        print(q.get())
-
-    print()
-
-    s = queue.LifoQueue()
-    s.put((2,1))
-    s.put((2, 2))
-    s.put((2, 3))
-    while not s.empty():
-        print(s.get())
-
-    print()
-
-    pq = queue.PriorityQueue()
-    pq.put(3)
-    pq.put(2)
-    pq.put(1)
-    while not pq.empty():
-        print(pq.get())
+    # q = queue.Queue();
+    # q.put((1,1))
+    # q.put((1,2))
+    # q.put((1,3))
+    # while not q.empty():
+    #     print(q.get())
+    #
+    # print()
+    #
+    # s = queue.LifoQueue()
+    # s.put((2,1))
+    # s.put((2, 2))
+    # s.put((2, 3))
+    # while not s.empty():
+    #     print(s.get())
+    #
+    # print()
+    #
+    # pq = queue.PriorityQueue()
+    # pq.put(3)
+    # pq.put(2)
+    # pq.put(1)
+    # while not pq.empty():
+    #     print(pq.get())
 
 
