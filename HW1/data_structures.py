@@ -99,8 +99,26 @@ class QueueAstar:
         return len(self.min_heap) == 0
 
     def updateCostToCome(self, node, parent):
+
+        # update the cost to come
         currentCostToCome = self.costToCome[node]
         possibleNewCostToCome = self.costToCome[parent] + 1
         newCostToCome = min(currentCostToCome, possibleNewCostToCome)
         self.costToCome[node] = newCostToCome
+
+        # //update the cost to go
+        newCostToGo = (findManDist(node, self.goals, self.stateSpace))
+
+        # find the new distance
+        newDistance = newCostToCome + newCostToGo
+
+        # update the priority queue
+        # find the node
+        for i in len(self.min_heap):
+            if self.min_heap[i][1] == node:
+                # update the distance in the pq
+                self.min_heap[i][2] == newDistance
+                # heapify
+                heapq.heapify(self.min_heap)
+
 

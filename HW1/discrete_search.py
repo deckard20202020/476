@@ -125,6 +125,7 @@ def fsearch(X, U, f, xI, XG, alg):
                 parents[neighbor] = node
             else:
             #     Resolve Duplicate x'
+            #     need to update cost to come dictionary as well as distance in the pq
                 q1.updateCostToCome(neighbor, node)
 
     # return FAILURE
