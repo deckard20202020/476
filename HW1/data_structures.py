@@ -19,8 +19,8 @@ class QueueBFS:
     def is_empty(self):
         return self.q.empty()
 
-    def updateQueue(self, node, parent):
-        a = None
+    def updateCostToCome(self, node, parent):
+        a = "We Don't need anything here"
 
 
 class QueueDFS:
@@ -38,8 +38,8 @@ class QueueDFS:
     def is_empty(self):
         return self.s.empty()
 
-    def updateQueue(self, node, parent):
-        a = None
+    def updateCostToCome(self, node, parent):
+        a = "We dont need anything here"
 
 # returns the cost to go by looping though the goals
 def findManDist(x, goals, stateSpace):
@@ -64,7 +64,8 @@ class QueueAstar:
     def pop(self):
         # we only return the grid tuple, not the distance
         # tup = self.pq.get()[0]
-        tup = self.min_heap.pop()[1][0]
+        entry = self.min_heap.pop()
+        tup = entry[1][0]
         return tup
 
     def insert(self, node, parent):
@@ -93,33 +94,13 @@ class QueueAstar:
         entry = (node, totalCost)
         heapq.heappush(self.min_heap, (entry[1], entry))
 
-        # tuples = [((1, 2), 100), ((3, 4), 5), ((5, 6), 1), ((7, 8), 8), ((9, 10), 4)]
-
-        #
-        # for t in tuples:
-        #     heapq.heappush(min_heap, (t[1], t))
-
     def is_empty(self):
         # return self.pq.empty()
         return len(self.min_heap) == 0
 
-    def updateQueue(self, node, parent):
-        costToComeOfParent = self.costToCome[parent]
-        costToCome = costToComeOfParent + 1
-
-        # cost to go is manhattan distance
-        manDist = findManDist(node, self.goals, self.stateSpace)
-
-        # sum the cost to come and the cost to go
-        totalCost = manDist + costToCome
-
-        # find the node in the min_heap and update it
-        for i in range(len(self.min_heap)):
-            possibleMatch = self.min_heap[i][1][0]
-            if possibleMatch == node:
-                currTotalCost = self.min_heap[i][1][2]
-                totalCost = min(totalCost, currTotalCost)
-                self.min_heap[i] = (self.min_heap[i][1], totalCost)
-
-        heapq.heapify(self.min_heap)
+    def updateCostToCome(self, node, parent):
+        currentCostToCome = self.costToCome[node]
+        possibleNewCostToCome = self.costToCome[parent] + 1
+        newCostToCome = min(currentCostToCome, possibleNewCostToCome)
+        self.costToCome[node] = newCostToCome
 

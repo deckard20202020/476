@@ -123,10 +123,9 @@ def fsearch(X, U, f, xI, XG, alg):
                 q1.insert(neighbor, node)
                 # update the parent
                 parents[neighbor] = node
-            # else:
+            else:
             #     Resolve Duplicate x'
-            # we need to update our priority queue
-            #     q1.updateQueue(neighbor, node)
+                q1.updateCostToCome(neighbor, node)
 
     # return FAILURE
     return {"visited": list(visited), "path": {}}
