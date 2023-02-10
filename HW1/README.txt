@@ -12,3 +12,5 @@ Your choices for algorithms are bfs, dfs, and astar
 You can easily add additional grids to test as well, following a similar format at that found in hw1_grid.json,
 hw1_noGoalGrid.json, etc.  You can also choose a json file to specify where your results are output, just as
 the example above or as the homework description explains.
+
+The data structures for my queues are in the data_structures.py file.
