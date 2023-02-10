@@ -64,7 +64,7 @@ class QueueAstar:
     def pop(self):
         # we only return the grid tuple, not the distance
         # tup = self.pq.get()[0]
-        entry = self.min_heap.pop()
+        entry = heapq.heappop((self.min_heap))
         tup = entry[1][0]
         return tup
 
@@ -114,10 +114,12 @@ class QueueAstar:
 
         # update the priority queue
         # find the node
-        for i in len(self.min_heap):
-            if self.min_heap[i][1] == node:
-                # update the distance in the pq
-                self.min_heap[i][2] == newDistance
+        for i in range(len(self.min_heap)):
+            if node == self.min_heap[i][1][0]:
+                # update the entry in the pq with the new distance
+                firstItem = newDistance
+                secondItem = (node, newDistance)
+                self.min_heap[i] = (firstItem, secondItem)
                 # heapify
                 heapq.heapify(self.min_heap)
 

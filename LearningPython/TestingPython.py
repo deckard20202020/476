@@ -47,8 +47,27 @@ def print_min_heap_with_distance():
     for t in tuples:
         heapq.heappush(min_heap, (t[1], t))
 
+    node = (1,2)
+
+    newDistance = 0
+
+    for i in range(len(min_heap)):
+        if node == min_heap[i][1][0]:
+             # gives me the entry in the heap
+            # entry = min_heap[i]
+            firstItem = newDistance
+            secondItem = (node, newDistance)
+            min_heap[i] = (firstItem, secondItem)
+            heapq.heapify(min_heap)
+
+    a = "is your heap sorted???"
+
     while min_heap:
-        print(heapq.heappop(min_heap))
+        entry = heapq.heappop((min_heap))
+        node = entry[1]
+        node1 = node[0]
+        print(node1)
+        # print(heapq.heappop(min_heap))
 
 def add_tuples(x, u):
     print(tuple(x + y for x, y in zip(x, u)))
