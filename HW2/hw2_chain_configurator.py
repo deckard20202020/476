@@ -12,9 +12,25 @@ def publish(config, W, L, D):
     @type D: float, the distance between the two points of attachment on each link
     """
     # TODO: Implement this function
-    raise NotImplementedError
+    # are we just assigning these variables to our Chain2D message
+    # and then using our talker to publish them to a channel?
+    talker(config, W, L, D)
 
+    # raise NotImplementedError
 
+def talker(config, W, L, D):
+    pub = rospy.Publisher('chain.config', Chain2D, queue_size=10)
+
+    rospy.init_node('talker', anonymous=True)
+    rate = rospy.Rate(1) # 10hz
+    while not rospy.is_shutdown():
+        mess = Chain2D()
+        mess.config = config
+        mess.W = W
+        mess.L = L
+        mess.D = D
+        pub.publish(mess)
+        rate.sleep()
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(

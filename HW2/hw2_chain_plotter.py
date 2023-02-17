@@ -8,6 +8,8 @@ def get_chain_msg():
     This function will wait until a message is received.
     """
     # TODO: Implement this function
+    # are we just trying to set up a node to listen for the message
+    # that was published by hw2_chain_configurator?
     raise NotImplementedError
 
 
