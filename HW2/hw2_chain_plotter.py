@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import matplotlib.pyplot as plt
+from cs476.msg import Chain2D
 
 
 def get_chain_msg():
@@ -10,8 +11,18 @@ def get_chain_msg():
     # TODO: Implement this function
     # are we just trying to set up a node to listen for the message
     # that was published by hw2_chain_configurator?
+    listener()
     raise NotImplementedError
 
+def listener():
+    rospy.init_node("listener", anonymous=True)
+    msg = rospy.wait_for_message("chain_config", Chain2D)
+    return msg
+    # callback(msg)
+
+# def callback(msg):
+#     msg_str = " ".join(map(str, msg.nums))
+#     rospy.loginfo(rospy.get_caller_id() + " I heard %s", msg_str)
 
 def plot_chain(config, W, L, D):
     """Plot a 2D kinematic chain A_1, ..., A_m

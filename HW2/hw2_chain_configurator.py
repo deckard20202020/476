@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys, argparse
 import rospy
+from cs476.msg import Chain2D
 
 
 def publish(config, W, L, D):
@@ -19,7 +20,7 @@ def publish(config, W, L, D):
     # raise NotImplementedError
 
 def talker(config, W, L, D):
-    pub = rospy.Publisher('chain.config', Chain2D, queue_size=10)
+    pub = rospy.Publisher('chain_config', Chain2D, queue_size=10)
 
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(1) # 10hz
