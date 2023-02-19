@@ -82,8 +82,19 @@ def testingMatrix():
 
 def testingTan():
     a = math.pi/6
+    print("This is the sin of theta")
     print(math.sin(a))
+    print("This is the cos of theta")
     print(math.cos(a))
+
+
+def buildTranslationMatrix(theta, x_t, y_t):
+
+    matrix = ([math.cos(theta), -(math.sin(theta)), x_t],
+              [math.sin(theta), math.cos(theta), y_t],
+              [0, 0, 1])
+
+    return matrix
 
 if __name__ == '__main__':
     # print_numbers_with_queue()
@@ -126,5 +137,8 @@ if __name__ == '__main__':
     # print(matrix)
 
     testingTan()
+    print()
+    matrix = buildTranslationMatrix(math.pi/6, 2, 3)
+    print(matrix)
 
 
