@@ -12,17 +12,18 @@ def get_chain_msg():
     # are we just trying to set up a node to listen for the message
     # that was published by hw2_chain_configurator?
     listener()
-    raise NotImplementedError
+    # raise NotImplementedError
 
 def listener():
     rospy.init_node("listener", anonymous=True)
     msg = rospy.wait_for_message("chain_config", Chain2D)
     return msg
+    # for testing
     # callback(msg)
 
-# def callback(msg):
-#     msg_str = " ".join(map(str, msg.nums))
-#     rospy.loginfo(rospy.get_caller_id() + " I heard %s", msg_str)
+def callback(msg):
+    msg_str = " ".join(map(str, msg.config))
+    rospy.loginfo(rospy.get_caller_id() + " I heard %s", msg_str)
 
 def plot_chain(config, W, L, D):
     """Plot a 2D kinematic chain A_1, ..., A_m
@@ -76,8 +77,63 @@ def get_link_positions(config, W, L, D):
         * joint_positions is a list [p_1, ..., p_{m+1}] where p_i is the position [x,y] of the joint between A_i and A_{i-1}
         * link_vertices is a list [V_1, ..., V_m] where V_i is the list of [x,y] positions of vertices of A_i
     """
-    # TODO: Implement this function
-    raise NotImplementedError
+    # # TODO: Implement this function
+    # raise NotImplementedError
+
+    jointPosition = (0,0)
+    cornersList = []
+    jointPositionList = []
+
+    # scroll through the configs calling our helper method
+
+    # add the corners
+    corners = getCorners(theta, W, L, D, jointPosition)
+
+    # add the joints
+    jointPosition = getNextJoint()
+    jointPostion = getnextJoint()
+
+def getCorners(theta, W, L, D, origin):
+
+    topRight = ()
+    bottomRight = ()
+    bottomLeft = ()
+    topLeft = ()
+    listOfPoints = []
+
+    baseForRightVerticies = getDistToRightCorners(L, D)
+    perpForTopVerticies = getPerpForTopCorners(W)
+    baseForLeftVertices = getDistToLeftCorners(L, D)
+    perpForBottomVerticies = getPerpForBottomBottomCorners(W)
+
+    x_t = origin[0]
+    y_t = origin[1]
+
+    x_t =  x_t + baseForRightVerticies
+    y_t =  y_t + perpForTopVerticies
+
+
+
+
+
+    return 0
+
+def getDistToRightCorners(L, D):
+    dist = D + (L - D) / 2.0
+    return dist
+
+def getPerpForTopCorners(W):
+    return W / 2.0
+
+def getDistToLeftCorners(L, D):
+    dist = -((L - D) / 2)
+    return dist
+
+def getPerpForBottomBottomCorners(W):
+    return - (W / 2.0)
+
+def getNextJoint():
+    return 0
 
 
 if __name__ == "__main__":

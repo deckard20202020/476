@@ -1,5 +1,6 @@
 import queue
 import heapq
+import numpy as np
 
 def print_numbers_with_queue():
     q = queue.Queue()
@@ -72,11 +73,17 @@ def print_min_heap_with_distance():
 def add_tuples(x, u):
     print(tuple(x + y for x, y in zip(x, u)))
 
+def testingMatrix():
+    mat1 = ([1, 6, 5], [3, 4, 8], [2, 12, 3])
+    mat2 = ([3, 4, 6], [5, 6, 7], [6, 56, 7])
+    res = np.dot(mat1, mat2)
+    return res
+
 if __name__ == '__main__':
     # print_numbers_with_queue()
     # print_numbers_with_stack()
     # print_numbers_min_heap()
-    print_min_heap_with_distance()
+    # print_min_heap_with_distance()
     # t1 = (1,2)
     # t2 = (1, 2)
     # t3 = (1, 2, 3)
@@ -108,5 +115,8 @@ if __name__ == '__main__':
     # pq.put(1)
     # while not pq.empty():
     #     print(pq.get())
+
+    matrix = testingMatrix()
+    print(matrix)
 
 
