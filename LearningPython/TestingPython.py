@@ -1,6 +1,7 @@
 import queue
 import heapq
 import numpy as np
+import math
 
 def print_numbers_with_queue():
     q = queue.Queue()
@@ -79,6 +80,11 @@ def testingMatrix():
     res = np.dot(mat1, mat2)
     return res
 
+def testingTan():
+    a = math.pi/6
+    print(math.sin(a))
+    print(math.cos(a))
+
 if __name__ == '__main__':
     # print_numbers_with_queue()
     # print_numbers_with_stack()
@@ -116,7 +122,9 @@ if __name__ == '__main__':
     # while not pq.empty():
     #     print(pq.get())
 
-    matrix = testingMatrix()
-    print(matrix)
+    # matrix = testingMatrix()
+    # print(matrix)
+
+    testingTan()
 
 
