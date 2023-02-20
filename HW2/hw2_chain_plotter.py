@@ -13,13 +13,16 @@ def get_chain_msg():
     # TODO: Implement this function
     # are we just trying to set up a node to listen for the message
     # that was published by hw2_chain_configurator?
-    listener()
-    # raise NotImplementedError
-
-def listener():
+    # listener()
     rospy.init_node("listener", anonymous=True)
     msg = rospy.wait_for_message("chain_config", Chain2D)
     return msg
+    # raise NotImplementedError
+
+# def listener():
+#     rospy.init_node("listener", anonymous=True)
+#     msg = rospy.wait_for_message("chain_config", Chain2D)
+#     return msg
     # for testing
     # callback(msg)
 
@@ -82,9 +85,6 @@ def get_link_positions(config, W, L, D):
     # # TODO: Implement this function
     # raise NotImplementedError
 
-    # initialize joint position to 0,0
-    jointPosition = [0,0]
-
     cornersList = []
     jointPositionList = []
 
@@ -94,19 +94,17 @@ def get_link_positions(config, W, L, D):
     else:
         jointPositionList.append([0, 0])
 
-    answer = []
-
     # scroll through the configs calling our helper method
     for i in range(len(config)):
-        theta = config[i]
-
-        # add the corners
-        corners = getCorners(theta, W, L, D, jointPosition)
-        cornersList.append(corners)
 
         # add the joints
-        jointPosition = getNextJoint(theta, W, L, D, jointPosition)
+        jointPosition = getNextJoint(i, config, W, L, D)
         jointPositionList.append(jointPosition)
+
+    # i have a list of all the joints now
+    for i in range(len(config)):
+        corners = getCorners(config, i, W, L, D, jointPositionList)
+        cornersList.append(corners)
 
     tuple = (jointPositionList, cornersList)
 
@@ -114,34 +112,33 @@ def get_link_positions(config, W, L, D):
     return tuple
 
 # will return a list of the 4 corners
-def getCorners(theta, W, L, D, origin):
+def getCorners(config, i, W, L, D):
 
     listOfPoints = []
-
-    x = origin[0]
-    y = origin[1]
 
     baseForRightVerticies = getDistToRightCorners(L, D)
     perpForTopVerticies = getPerpForTopCorners(W)
     baseForLeftVertices = getDistToLeftCorners(L, D)
     perpForBottomVerticies = getPerpForBottomBottomCorners(W)
 
-    x_tTopRight = x + baseForRightVerticies
-    y_tTopRight = y + perpForTopVerticies
+    # is this the x, y instead of the x_t, y_t?
+    # to get the x_t we need to add the x and y from the origin?
+    xTopRight = baseForRightVerticies
+    yTopRight = perpForTopVerticies
     # returns a list of length 2
-    topRight = findNewCorner(theta, x_tTopRight, y_tTopRight)
+    topRight = findNewCorner(config, i, xTopRight, yTopRight, D)
 
-    x_tBottomRight = x + baseForRightVerticies
-    y_tBottomRight = y + perpForBottomVerticies
-    bottomRight = findNewCorner(theta, x_tBottomRight, y_tBottomRight)
+    xBottomRight = baseForRightVerticies
+    yBottomRight = perpForBottomVerticies
+    bottomRight = findNewCorner(config, i, xBottomRight, yBottomRight, D)
 
-    x_tTopLeft = x + baseForLeftVertices
-    y_tTopLeft = y + perpForTopVerticies
-    topLeft = findNewCorner(theta, x_tTopLeft, y_tTopLeft)
+    xTopLeft = baseForLeftVertices
+    yTopLeft = perpForTopVerticies
+    topLeft = findNewCorner(config, i, xTopLeft, yTopLeft, D)
 
-    x_tBottomLeft = x + baseForLeftVertices
-    y_tBottomLeft = y + perpForBottomVerticies
-    bottomLeft = findNewCorner(theta, x_tBottomLeft, y_tBottomLeft)
+    xBottomLeft = baseForLeftVertices
+    yBottomLeft = perpForBottomVerticies
+    bottomLeft = findNewCorner(config, i, xBottomLeft, yBottomLeft, D)
 
     listOfPoints.append(topRight)
     listOfPoints.append(bottomRight)
@@ -151,16 +148,58 @@ def getCorners(theta, W, L, D, origin):
     return listOfPoints
 
 # will return a list of size two
-def findNewCorner(theta, x_t, y_t):
+def findNewCorner(config, i, x, y, D):
 
-    translationMatrix = buildTranslationMatrix(theta, x_t, y_t)
-    coordMatrix = buildCoordMatrix(theta, x_t, y_t)
+    theta = config[i]
 
-    answerMatrix = np.dot(translationMatrix, coordMatrix)
+    coordMatrix = buildCoordMatrix(theta, x, y)
+    if (i == 0):
+        translationMatrix = buildTranslationMatrix(theta, 0, 0)
+        answerMatrix = np.dot(translationMatrix, coordMatrix)
+        answer = [answerMatrix[0], answerMatrix[1]]
+        return answer
 
+    translationMatrix = buildTranslationMatrix(theta, D, 0)
+    answerMatrix = np.dot(translationMatrix, findNewCorner(config, i - 1, x, y, D))
     answer = [answerMatrix[0], answerMatrix[1]]
     return answer
 
+def getNextJoint(i, config, W, L, D):
+
+    x = 0 + D
+    y = 0
+
+    coordMatrix = buildCoordMatrix(x, y)
+
+    answerMatrix = recursion(coordMatrix, D, i, config)
+
+    # convert our answer to a list
+    list = [answerMatrix[0], answerMatrix[1]]
+    return list
+
+def recursion(coordMatrix, D, i, listOfAngles):
+
+    theta = listOfAngles[i]
+
+    if (i == 0):
+        translationMatrix = buildTranslationMatrix(theta, 0, 0)
+        return np.dot(translationMatrix, coordMatrix)
+
+    translationMatrix = buildTranslationMatrix(theta, D, 0)
+    return np.dot(translationMatrix, recursion((coordMatrix, D, i - 1, listOfAngles)))
+
+def buildTranslationMatrix(theta, x_t, y_t):
+
+    matrix = ([math.cos(theta), -(math.sin(theta)), x_t],
+              [math.sin(theta), math.cos(theta), y_t],
+              [0, 0, 1])
+
+    return matrix
+
+def buildCoordMatrix(x, y):
+
+    matrix = ([x, y, 1])
+    return matrix
 
 def getDistToRightCorners(L, D):
     dist = D + (L - D) / 2.0
@@ -175,39 +214,6 @@ def getDistToLeftCorners(L, D):
 
 def getPerpForBottomBottomCorners(W):
     return -(W / 2.0)
-
-def getNextJoint(theta, W, L, D, origin):
-
-    # get x and y
-    x = origin[0]
-    y = origin[1]
-
-    # get the translation
-    x_t = origin[0] + W
-    y_t = origin[1] + 0
-
-    translationMatrix = buildTranslationMatrix(theta, x_t, y_t)
-    coordMatrix = buildCoordMatrix(x, y)
-
-    answerMatrix = np.dot(translationMatrix, coordMatrix)
-
-    # convert our answer to a list
-    list = [answerMatrix[0], answerMatrix[1]]
-    return list
-
-
-def buildTranslationMatrix(theta, x_t, y_t):
-
-    matrix = ([math.cos(theta), -(math.sin(theta)), x_t],
-              [math.sin(theta), math.cos(theta), y_t],
-              [0, 0, 1])
-
-    return matrix
-
-def buildCoordMatrix(x, y):
-
-    matrix = ([x, y, y])
-    return matrix
 
 
 if __name__ == "__main__":
