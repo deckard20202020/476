@@ -2,6 +2,8 @@
 import rospy
 import matplotlib.pyplot as plt
 from cs476.msg import Chain2D
+import numpy as np
+import math
 
 
 def get_chain_msg():
@@ -80,43 +82,85 @@ def get_link_positions(config, W, L, D):
     # # TODO: Implement this function
     # raise NotImplementedError
 
-    jointPosition = (0,0)
+    # initialize joint position to 0,0
+    jointPosition = [0,0]
+
     cornersList = []
     jointPositionList = []
 
+    # if m = 0, jointpositions should be an empty list
+    if (len(config) == 0):
+        jointPositionList = []
+    else:
+        jointPositionList.append([0, 0])
+
+    answer = []
+
     # scroll through the configs calling our helper method
+    for i in range(len(config)):
+        theta = config[i]
 
-    # add the corners
-    corners = getCorners(theta, W, L, D, jointPosition)
+        # add the corners
+        corners = getCorners(theta, W, L, D, jointPosition)
+        cornersList.append(corners)
 
-    # add the joints
-    jointPosition = getNextJoint()
-    jointPostion = getnextJoint()
+        # add the joints
+        jointPosition = getNextJoint(theta, W, L, D, jointPosition)
+        jointPositionList.append(jointPosition)
 
+    tuple = (jointPositionList, cornersList)
+
+    # this should return a tuple
+    return tuple
+
+# will return a list of the 4 corners
 def getCorners(theta, W, L, D, origin):
 
-    topRight = ()
-    bottomRight = ()
-    bottomLeft = ()
-    topLeft = ()
     listOfPoints = []
+
+    x = origin[0]
+    y = origin[1]
 
     baseForRightVerticies = getDistToRightCorners(L, D)
     perpForTopVerticies = getPerpForTopCorners(W)
     baseForLeftVertices = getDistToLeftCorners(L, D)
     perpForBottomVerticies = getPerpForBottomBottomCorners(W)
 
-    x_t = origin[0]
-    y_t = origin[1]
+    x_tTopRight = x + baseForRightVerticies
+    y_tTopRight = y + perpForTopVerticies
+    # returns a list of length 2
+    topRight = findNewCorner(theta, x_tTopRight, y_tTopRight)
 
-    x_t =  x_t + baseForRightVerticies
-    y_t =  y_t + perpForTopVerticies
+    x_tBottomRight = x + baseForRightVerticies
+    y_tBottomRight = y + perpForBottomVerticies
+    bottomRight = findNewCorner(theta, x_tBottomRight, y_tBottomRight)
 
+    x_tTopLeft = x + baseForLeftVertices
+    y_tTopLeft = y + perpForTopVerticies
+    topLeft = findNewCorner(theta, x_tTopLeft, y_tTopLeft)
 
+    x_tBottomLeft = x + baseForLeftVertices
+    y_tBottomLeft = y + perpForBottomVerticies
+    bottomLeft = findNewCorner(theta, x_tBottomLeft, y_tBottomLeft)
 
+    listOfPoints.append(topRight)
+    listOfPoints.append(bottomRight)
+    listOfPoints.append(topLeft)
+    listOfPoints.append(bottomLeft)
 
+    return listOfPoints
 
-    return 0
+# will return a list of size two
+def findNewCorner(theta, x_t, y_t):
+
+    translationMatrix = buildTranslationMatrix(theta, x_t, y_t)
+    coordMatrix = buildCoordMatrix(theta, x_t, y_t)
+
+    answerMatrix = np.dot(translationMatrix, coordMatrix)
+
+    answer = [answerMatrix[0], answerMatrix[1]]
+    return answer
+
 
 def getDistToRightCorners(L, D):
     dist = D + (L - D) / 2.0
@@ -130,10 +174,40 @@ def getDistToLeftCorners(L, D):
     return dist
 
 def getPerpForBottomBottomCorners(W):
-    return - (W / 2.0)
+    return -(W / 2.0)
 
-def getNextJoint():
-    return 0
+def getNextJoint(theta, W, L, D, origin):
+
+    # get x and y
+    x = origin[0]
+    y = origin[1]
+
+    # get the translation
+    x_t = origin[0] + W
+    y_t = origin[1] + 0
+
+    translationMatrix = buildTranslationMatrix(theta, x_t, y_t)
+    coordMatrix = buildCoordMatrix(x, y)
+
+    answerMatrix = np.dot(translationMatrix, coordMatrix)
+
+    # convert our answer to a list
+    list = [answerMatrix[0], answerMatrix[1]]
+    return list
+
+
+def buildTranslationMatrix(theta, x_t, y_t):
+
+    matrix = ([math.cos(theta), -(math.sin(theta)), x_t],
+              [math.sin(theta), math.cos(theta), y_t],
+              [0, 0, 1])
+
+    return matrix
+
+def buildCoordMatrix(x, y):
+
+    matrix = ([x, y, y])
+    return matrix
 
 
 if __name__ == "__main__":
