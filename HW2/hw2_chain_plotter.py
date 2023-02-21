@@ -153,8 +153,8 @@ def getCorners(config, i, W, L, D, jointPositionList):
 
     listOfPoints.append(topRight)
     listOfPoints.append(bottomRight)
-    listOfPoints.append(topLeft)
     listOfPoints.append(bottomLeft)
+    listOfPoints.append(topLeft)
 
     return listOfPoints
 
@@ -164,14 +164,18 @@ def findNewCorner(config, i, x, y, D):
     theta = config[i]
 
     coordMatrix = buildCoordMatrix(x, y)
-    if (i == 0):
-        translationMatrix = buildTranslationMatrix(theta, 0, 0)
-        answerMatrix = np.dot(translationMatrix, coordMatrix)
-        answer = [answerMatrix[0], answerMatrix[1]]
-        return answer
+    # if (i == 0):
+    #     translationMatrix = buildTranslationMatrix(theta, 0, 0)
+    #     answerMatrix = np.dot(translationMatrix, coordMatrix)
+    #     answer = [answerMatrix[0], answerMatrix[1]]
+    #     return answer
+    #
+    # translationMatrix = buildTranslationMatrix(theta, D, 0)
+    # answerMatrix = np.dot(translationMatrix, findNewCorner(config, i - 1, x, y, D))
 
-    translationMatrix = buildTranslationMatrix(theta, D, 0)
-    answerMatrix = np.dot(translationMatrix, findNewCorner(config, i - 1, x, y, D))
+    leftHandSide = recursion(coordMatrix, D, i, config)
+    answerMatrix = np.dot(leftHandSide, coordMatrix)
+
     answer = [answerMatrix[0], answerMatrix[1]]
     return answer
 
