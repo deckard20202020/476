@@ -176,7 +176,7 @@ def findNewCorner(config, i, x, y, D):
     leftHandSide = recursion(coordMatrix, D, i, config)
     answerMatrix = np.dot(leftHandSide, coordMatrix)
 
-    answer = [answerMatrix[0], answerMatrix[1]]
+    answer = [answerMatrix[0][0], answerMatrix[1][0]]
     return answer
 
 def getNextJoint(i, config, W, L, D):
@@ -190,7 +190,7 @@ def getNextJoint(i, config, W, L, D):
     answerMatrix = np.dot(leftHandSide, coordMatrix)
 
     # convert our answer to a list
-    list = [answerMatrix[0], answerMatrix[1]]
+    list = [answerMatrix[0][0], answerMatrix[1][0]]
     return list
 
 def recursion(coordMatrix, D, i, listOfAngles):
@@ -237,6 +237,15 @@ def getDistToLeftCorners(L, D):
 
 def getPerpForBottomBottomCorners(W):
     return -(W / 2.0)
+
+# def get_link_indices_containing(v, config, W, L, D):
+    # v is a tuple (x, y)
+    # returns the subset of {1,...,m} that represents all the
+    # indices of the links that contain v
+    # Note that the index of the first link is 1.
+
+    # call get_link_positions() to get the links and get the links
+
 
 
 if __name__ == "__main__":
