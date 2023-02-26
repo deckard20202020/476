@@ -151,10 +151,15 @@ def getCorners(config, i, W, L, D, jointPositionList):
     yBottomLeft = perpForBottomVerticies
     bottomLeft = findNewCorner(config, i, xBottomLeft, yBottomLeft, D)
 
+    # listOfPoints.append(topRight)
+    # listOfPoints.append(bottomRight)
+    # listOfPoints.append(bottomLeft)
+    # listOfPoints.append(topLeft)
+
     listOfPoints.append(topRight)
-    listOfPoints.append(bottomRight)
-    listOfPoints.append(bottomLeft)
     listOfPoints.append(topLeft)
+    listOfPoints.append(bottomLeft)
+    listOfPoints.append(bottomRight)
 
     return listOfPoints
 
@@ -238,14 +243,74 @@ def getDistToLeftCorners(L, D):
 def getPerpForBottomBottomCorners(W):
     return -(W / 2.0)
 
-# def get_link_indices_containing(v, config, W, L, D):
+def get_link_indices_containing(v, config, W, L, D):
     # v is a tuple (x, y)
     # returns the subset of {1,...,m} that represents all the
     # indices of the links that contain v
     # Note that the index of the first link is 1.
 
     # call get_link_positions() to get the links and get the links
+    #     this will return a tuple = (jointPositionList, cornersList)
+    #     jointPositionList is an array [[x_1, y_1], [x_2, y_2] ... [x_m+1, y_m+1]]
+    #     cornersList is an array
+    #     [[[7.071067626413751, 8.48528152878167], [8.485281219695466, 7.071067997317195], [3.090862032983921e-08, -1.4142135623730947], [-1.4142135623730947, -3.090862032983921e-08]],
+    #      [[-1.4142141805454853, 14.14213522191887], [-7.108982542636255e-07, 15.556348877017822], [8.485281219695464, 7.071068059134436], [7.071067750048233, 5.656854404035483]],
+    #      [[-1.000001098997683, 25.14213527093333], [0.9999989010023151, 25.142135358356107], [0.9999994255389959, 13.142135358356123], [-1.0000005744610023, 13.142135270933343]]]
 
+    # listOfPoints.append(topRight)
+    # listOfPoints.append(topLeft)
+    # listOfPoints.append(bottomLeft)
+    # listOfPoints.append(bottomRight)
+
+    listOfLinksThatContainPoint = []
+
+    tuple = get_link_positions(config, W, L, D)
+    cornersList = tuple[1]
+    a = 1
+    # now that I have my corners I can build my half planes/sets for each link
+    # for each link
+    for i in range(len(cornersList)):
+        isVInLink = findHalfPlaneForLink(v, cornersList[i])
+
+        # if it is in the link add it to our list
+        if (isVInLink == True):
+            listOfLinksThatContainPoint.append(i + 1)
+
+    return listOfLinksThatContainPoint
+
+def findHalfPlaneForLink(v, corners):
+
+    pointsForLine1 = [corners[0], corners[1]]
+    pointsForLine2 = [corners[1], corners[2]]
+    pointsForLine3 = [corners[0], corners[1]]
+    pointsForLine4 = [corners[0], corners[1]]
+
+    # find 4 half planes and see if v is in them
+    isInTopPlane = planeCheck(v, pointsForLine1)
+    isInLeftPlane = planeCheck(v, pointsForLine2)
+    isInBottomPlane = planeCheck(v, pointsForLine3)
+    isInRightPlane = planeCheck(v, pointsForLine4)
+
+    if (isInTopPlane and isInLeftPlane and isInBottomPlane and isInRightPlane):
+        return True
+    a = 1
+
+    return False
+
+def planeCheck(v, pointsForLine):
+    a = 1
+    x = v[0]
+    y = v[1]
+    x_a = pointsForLine[0][0]
+    y_a = pointsForLine[0][1]
+    x_b = pointsForLine[1][0]
+    y_b = pointsForLine[1][1]
+    a = 1
+    f = ((y_b - y_a) * x) + ((x_a - x_b) * y) + (x_b * y_a) - (x_a * y_b)
+    if (f <= 0):
+        return True
+
+    return False
 
 
 if __name__ == "__main__":
@@ -266,5 +331,9 @@ if __name__ == "__main__":
     W = 2
     L = 12
     D = 10
-
+    #
     plot_chain(config, W, L, D)
+
+    v = (0,0)
+    list = get_link_indices_containing(v, config, W, L, D)
+    print(list)
