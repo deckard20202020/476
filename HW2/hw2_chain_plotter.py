@@ -151,11 +151,6 @@ def getCorners(config, i, W, L, D, jointPositionList):
     yBottomLeft = perpForBottomVerticies
     bottomLeft = findNewCorner(config, i, xBottomLeft, yBottomLeft, D)
 
-    # listOfPoints.append(topRight)
-    # listOfPoints.append(bottomRight)
-    # listOfPoints.append(bottomLeft)
-    # listOfPoints.append(topLeft)
-
     listOfPoints.append(topRight)
     listOfPoints.append(topLeft)
     listOfPoints.append(bottomLeft)
