@@ -334,6 +334,9 @@ if __name__ == "__main__":
     #
     plot_chain(config, W, L, D)
 
-    v = (0,0)
+    # test cases
+    v = (0, 0)
+    v = (-5,0)
+    v = (0,15)
     list = get_link_indices_containing(v, config, W, L, D)
     print(list)
