@@ -1,7 +1,9 @@
 import json, sys, os, argparse
 import matplotlib.pyplot as plt
-from discrete_search import fsearch, ALG_BFS
-from hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
+# from discrete_search import fsearch, ALG_BFS
+from HW1.discrete_search import fsearch, ALG_BFS
+# from hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
+from HW1.hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
 
 
 LINK_ANGLES = [i - 180 for i in range(360)]
