@@ -1,4 +1,6 @@
 import json, sys, os, argparse
+import math
+
 # import matplotlib.pyplot as plt
 # # from discrete_search import fsearch, ALG_BFS
 # from HW1.discrete_search import fsearch, ALG_BFS
@@ -35,12 +37,14 @@ def compute_Cobs(O, W, L, D):
         for j in range(360):
             grid[i][j] = [i - 180, j - 180]
 
-    # scroll through the 360 x 360 grid
+    # # scroll through the 360 x 360 grid
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             # find the link positions of the robot
             config = grid[i][j]
-            tuple = get_link_positions(config, W, L, D)
+            radiansConfig = [math.radians(config[0]), math.radians(config[1])]
+    #         config = [math.pi/2.0, 0]
+            tuple = get_link_positions(radiansConfig, W, L, D)
             linkPositions = tuple[1]
 
             # scroll through the obstacles
