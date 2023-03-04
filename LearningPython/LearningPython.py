@@ -3,6 +3,8 @@ import heapq
 import numpy as np
 import math
 
+from shapely.geometry import Polygon
+
 def print_numbers_with_queue():
     q = queue.Queue()
 
@@ -96,6 +98,19 @@ def buildTranslationMatrix(theta, x_t, y_t):
 
     return matrix
 
+def testingPolygon():
+
+    # linkPositions = [[[-11.015777053157588, -0.8078712243462735], [0.9823952887191079, -1.0173001015936747], [1.0173001015936747, 0.9823952887191079], [-10.98087224028302, 1.191824165966509]], [[1.0173001015936745, 0.9823952887191092], [-10.98087224028302, 1.191824165966509], [-11.015777053157587, -0.8078712243462736], [0.9823952887191094, -1.0173001015936733]]]
+
+    linkPositions = [[-1, 11], [1, 11], [1, 13], [-1, 13]]
+    linkPositions = [[-1, 10], [1, 10], [1,12], [-1,12]]
+    p1 = Polygon(linkPositions)
+    obstacle = [[-1, 11], [1, 11], [1, 13], [-1, 13]]
+    pO = Polygon(obstacle)
+
+    doTheyIntersect = p1.intersects(pO)
+    print(doTheyIntersect)
+
 if __name__ == '__main__':
     # print_numbers_with_queue()
     # print_numbers_with_stack()
@@ -136,9 +151,11 @@ if __name__ == '__main__':
     # matrix = testingMatrix()
     # print(matrix)
 
-    testingTan()
-    print()
-    matrix = buildTranslationMatrix(math.pi/6, 2, 3)
-    print(matrix)
+    # testingTan()
+    # print()
+    # matrix = buildTranslationMatrix(math.pi/6, 2, 3)
+    # print(matrix)
+
+    testingPolygon()
 
 

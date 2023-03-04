@@ -11,11 +11,39 @@ from HW2.hw2_chain_plotter import get_link_positions
 from shapely.geometry import Polygon
 
 
+class CustomConfiguration:
+    def __init__(self, x, y):
+        self._x = x
+        self._y = y
+
+    def __eq__(self, other):
+        if not isinstance(other, CustomConfiguration):
+            return False
+        return self._x == other._x and self._y == other._y
+
+    def __hash__(self):
+        return hash((self._x, self._y))
+
+    # def getX(self):
+    #     return self._x
+    #
+    # def getY(self):
+    #     return self._y
+
+    @property
+    def x(self):
+        return self._x
+
+    @property
+    def y(self):
+        return self._y
+
+
 LINK_ANGLES = [i - 180 for i in range(360)]
 
 
 def compute_Cobs(O, W, L, D):
-# def compute_Cobs():
+    # def compute_Cobs():
     """Compute C-Space obstacles for a 2-link robot
     @type O:   a list of obstacles, where for each i, O[i] is a list [(x_0, y_0), ..., (x_m, y_m)]
                of coordinates of the vertices of the i^th obstacle
@@ -28,22 +56,26 @@ def compute_Cobs(O, W, L, D):
     # # TODO: Implement this function
     # raise NotImplementedError
 
+    setOfCustomConfigs = set()
     configurationList = []
 
-    # create the 360 x 360 grid
-    rows, cols = (360, 360)
-    grid = [[0] * cols] * rows
-    for i in range(360):
-        for j in range(360):
-            grid[i][j] = [i - 180, j - 180]
+    # # create the 360 x 360 grid
+    # rows, cols = (360, 360)
+    # grid = [[0] * cols] * rows
+    # for i in range(360):
+    #     for j in range(360):
+    #         grid[i][j] = [i - 180, j - 180]
 
     # # scroll through the 360 x 360 grid
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
+    # for i in range(len(grid)):
+    #     for j in range(len(grid[0])):
+    for i in range(-180, 180):
+        for j in range(-180, 180):
             # find the link positions of the robot
-            config = grid[i][j]
+            # config = grid[i][j]
+            config = [i, j]
             radiansConfig = [math.radians(config[0]), math.radians(config[1])]
-    #         config = [math.pi/2.0, 0]
+            # config = [(math.pi / 2.0), 0]
             tuple = get_link_positions(radiansConfig, W, L, D)
             linkPositions = tuple[1]
 
@@ -61,11 +93,30 @@ def compute_Cobs(O, W, L, D):
                     doesIntersect = p1.intersects(p2)
 
                     # if they collide add this to our list of bad configurations
-                    if(doesIntersect == True):
-                        configurationList.append(grid[i][j])
+                    if (doesIntersect == True):
+                        # how can I solve duplicates in this list?
 
+                        # make a new configuration from our custom class
+                        x = config[0]
+                        y = config[1]
+                        configTuple = (x, y)
+                        # customConfig = CustomConfiguration(x, y)
+                        # setOfCustomConfigs.add(customConfig)
+                        setOfCustomConfigs.add(configTuple)
 
-    return configurationList
+                        # configurationList.append(grid[i][j])
+
+    # convert our set to a list
+    for c in setOfCustomConfigs:
+        # make it a list
+        list = [c[0], c[1]]
+        # list = [c.x, c.y]
+        configurationList.append(list)
+
+    # return configurationList
+
+    sortedList = sorted(configurationList, key=lambda x: (x[0], x[1]))
+    return sortedList
 
 
 def compute_Cfree(Cobs):
@@ -76,6 +127,7 @@ def compute_Cfree(Cobs):
     """
     # TODO: Implement this function
     raise NotImplementedError
+
 
 # This function should return an instance of Grid2DStates class from Homework 1
 
@@ -147,6 +199,7 @@ if __name__ == "__main__":
 
     # me testing
     O = [[[-1, -13], [1, -13], [ 1, -11], [-1, -11]], [[-1, 11], [ 1, 11], [ 1, 13], [-1, 13]]]
+    # O = [[[-1, 11], [1, 11], [1, 13], [-1, 13]]]
 
     W = 2
     L = 12
