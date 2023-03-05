@@ -159,18 +159,6 @@ if __name__ == "__main__":
     xI = (60, 30)
     # XG = [60, 150]
     XG = (60, 150)
-    #
-    # p1 = Polygon([(0, 0), (1, 1), (1, 0)])
-    # p2 = Polygon([(0, 1), (1, 0), (1, 1)])
-    #
-    # listOfCollisions = compute_Cobs(O, W, L, D)
-    # print(listOfCollisions)
-    #
-    # print()
-    # print()
-    #
-    # Cfree = compute_Cfree(listOfCollisions)
-    # print(Cfree)
 
     # testing for task 2
     Cobs = compute_Cobs(O, W, L, D)
