@@ -128,42 +128,9 @@ def parse_desc(desc):
 
 
 if __name__ == "__main__":
-    # args = parse_args()
-    # (O, W, L, D, xI, XG, U) = parse_desc(args.desc)
-    # Cobs = compute_Cobs(O, W, L, D)
-    #
-    # X = compute_Cfree(Cobs)
-    # f = GridStateTransition()
-    # U = Grid2DActions(X, f)
-    #
-    # search_result = fsearch(X, U, f, xI, XG, ALG_BFS)
-    #
-    # result = {"Cobs": Cobs, "path": search_result["path"]}
-    #
-    # with open(args.out, "w") as outfile:
-    #     json.dump(result, outfile)
-    #
-    # fig, ax = plt.subplots()
-    # X.draw(ax, grid_on=False, tick_step=[30, 30])
-    # draw_path(ax, search_result["path"])
-    # plt.show()
-
-    # me testing
-    O = [[[-1, -13], [1, -13], [ 1, -11], [-1, -11]], [[-1, 11], [ 1, 11], [ 1, 13], [-1, 13]]]
-    # O = [[[-1, 11], [1, 11], [1, 13], [-1, 13]]]
-
-    W = 2
-    L = 12
-    D = 10
-    # xI = [60, 30]
-    xI = (60, 30)
-    # XG = [60, 150]
-    XG = (60, 150)
-
-    # testing for task 2
+    args = parse_args()
+    (O, W, L, D, xI, XG, U) = parse_desc(args.desc)
     Cobs = compute_Cobs(O, W, L, D)
-    print(len(Cobs))
-    print()
 
     X = compute_Cfree(Cobs)
     f = GridStateTransition()
@@ -172,7 +139,40 @@ if __name__ == "__main__":
     search_result = fsearch(X, U, f, xI, XG, ALG_BFS)
 
     result = {"Cobs": Cobs, "path": search_result["path"]}
-    print(result)
+
+    with open(args.out, "w") as outfile:
+        json.dump(result, outfile)
+
+    fig, ax = plt.subplots()
+    X.draw(ax, grid_on=False, tick_step=[30, 30])
+    draw_path(ax, search_result["path"])
+    plt.show()
+
+    # me testing
+    # O = [[[-1, -13], [1, -13], [ 1, -11], [-1, -11]], [[-1, 11], [ 1, 11], [ 1, 13], [-1, 13]]]
+    # # O = [[[-1, 11], [1, 11], [1, 13], [-1, 13]]]
+    #
+    # W = 2
+    # L = 12
+    # D = 10
+    # # xI = [60, 30]
+    # xI = (60, 30)
+    # # XG = [60, 150]
+    # XG = (60, 150)
+    #
+    # # testing for task 2
+    # Cobs = compute_Cobs(O, W, L, D)
+    # print(len(Cobs))
+    # print()
+    #
+    # X = compute_Cfree(Cobs)
+    # f = GridStateTransition()
+    # U = Grid2DActions(X, f)
+    #
+    # search_result = fsearch(X, U, f, xI, XG, ALG_BFS)
+    #
+    # result = {"Cobs": Cobs, "path": search_result["path"]}
+    # print(result)
 
     # with open(args.out, "w") as outfile:
     #     json.dump(result, outfile)
