@@ -1,4 +1,4 @@
-from HW1.data_structures import QueueBFS, QueueDFS, QueueAstar
+from HW.data_structures import QueueBFS, QueueDFS, QueueAstar
 
 ALG_BFS = "bfs"
 ALG_DFS = "dfs"

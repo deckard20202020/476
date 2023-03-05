@@ -1,5 +1,5 @@
 
-from hw2_chain_plotterSolution import get_link_positions
+from HW.hw2_chain_plotterSolution import get_link_positions
 
 
 def is_in_half_space(v, v1, v2):
