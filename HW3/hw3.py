@@ -8,6 +8,10 @@ import math
 # from HW1.hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
 # from HW2.hw2_chain_plotter import get_link_positions
 
+from hw2_chain_plotterSolution import get_link_positions
+from hw1Solution import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
+from discrete_searchSolution import fsearch, ALG_BFS
+
 from shapely.geometry import Polygon
 
 
