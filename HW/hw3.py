@@ -80,7 +80,7 @@ def compute_Cfree(Cobs):
     # # TODO: Implement this function
     # raise NotImplementedError
 
-    grid2DStates = Grid2DStates(-180, 179, -180, 179, Cobs)
+    grid2DStates = Grid2DStates(-180, 180, -180, 180, Cobs)
     return grid2DStates
 
 def parse_args():
