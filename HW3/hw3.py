@@ -6,7 +6,7 @@ import math
 # from HW1.discrete_search import fsearch, ALG_BFS
 # # from hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
 # from HW1.hw1 import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
-from HW2.hw2_chain_plotter import get_link_positions
+# from HW2.hw2_chain_plotter import get_link_positions
 
 from shapely.geometry import Polygon
 
@@ -125,8 +125,42 @@ def compute_Cfree(Cobs):
                 between the robot and an obstacle in O.
     @return an instance of Grid2DStates that represents the free space
     """
-    # TODO: Implement this function
-    raise NotImplementedError
+    # # TODO: Implement this function
+    # raise NotImplementedError
+
+    listOfTuplesCobs = []
+
+    # sort the list for output
+    sortedList = sorted(Cobs, key=lambda x: (x[0], x[1]))
+
+    # convert the list of obs to a list of tuples
+    for config in sortedList:
+        tuple = (config[0], config[1])
+        listOfTuplesCobs.append(tuple)
+
+    grid2DStates = Grid2DStates(0, 359, 0, 359, listOfTuplesCobs)
+    return grid2DStates
+
+
+    # cFree = []
+    # cobsSet = set()
+    #
+    # # convert Cobs to a set of tuples
+    # for c in Cobs:
+    #     tuple = (c[0], c[1])
+    #     cobsSet.add(tuple)
+    #
+    # # scroll through the grid
+    # for i in range(-180, 180):
+    #     for j in range(-180, 180):
+    #
+    #         # create a tuple
+    #         tuple = (i, j)
+    #
+    #         # check to see if it is not in obs
+    #         if (tuple not in cobsSet):
+    #             list = [tuple[0], tuple[1]]
+    #             cFree.append(list)
 
 
 # This function should return an instance of Grid2DStates class from Homework 1
@@ -206,9 +240,35 @@ if __name__ == "__main__":
     D = 10
     xI = [60, 30]
     XG = [60, 150]
+    #
+    # p1 = Polygon([(0, 0), (1, 1), (1, 0)])
+    # p2 = Polygon([(0, 1), (1, 0), (1, 1)])
+    #
+    # listOfCollisions = compute_Cobs(O, W, L, D)
+    # print(listOfCollisions)
+    #
+    # print()
+    # print()
+    #
+    # Cfree = compute_Cfree(listOfCollisions)
+    # print(Cfree)
 
-    p1 = Polygon([(0, 0), (1, 1), (1, 0)])
-    p2 = Polygon([(0, 1), (1, 0), (1, 1)])
+    # testing for task 2
+    Cobs = compute_Cobs(O, W, L, D)
 
-    listOfCollisions = compute_Cobs(O, W, L, D)
-    print(listOfCollisions)
+    X = compute_Cfree(Cobs)
+    f = GridStateTransition()
+    U = Grid2DActions(X, f)
+
+    search_result = fsearch(X, U, f, xI, XG, ALG_BFS)
+
+    result = {"Cobs": Cobs, "path": search_result["path"]}
+    print(result)
+
+    # with open(args.out, "w") as outfile:
+    #     json.dump(result, outfile)
+    #
+    # fig, ax = plt.subplots()
+    # X.draw(ax, grid_on=False, tick_step=[30, 30])
+    # draw_path(ax, search_result["path"])
+    # plt.show()
