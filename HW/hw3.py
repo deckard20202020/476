@@ -12,8 +12,7 @@ from hw2_chain_plotterSolution import get_link_positions
 from hw1Solution import Grid2DStates, GridStateTransition, Grid2DActions, draw_path
 from discrete_searchSolution import fsearch, ALG_BFS
 
-from shapely.geometry import Polygon
-
+from shapely.geometry import Polygon, Point
 
 LINK_ANGLES = [i - 180 for i in range(360)]
 
@@ -126,6 +125,57 @@ def parse_desc(desc):
     U = [(0, 1), (0, -1), (-1, 0), (1, 0)]
     return (O, W, L, D, xI, XG, U)
 
+def finerCollisionChecking(path, Obstacles):
+
+    # list of configs along our path that are in collision with an obstacle
+    collisions = []
+
+    # variable representing how fine of a discretization we want
+    increment = .5
+
+    # scroll through the path
+    for i in range(len(path) - 1):
+
+        # grab the coordinates from the first point
+        firstPoint = path[i]
+        x_1 = firstPoint[0]
+        y_1 = firstPoint[1]
+
+        # grab the coordinates from the second point
+        secondPoint = path[i + 1]
+        x_2 = secondPoint[0]
+        y_2 = secondPoint[1]
+
+        # find the amount you will increment each of the thetas in the config
+        step = ((x_2 - x_1) * increment, (y_2 - y_1) * increment)
+
+
+        for i in range(1, (1 / increment)):
+
+            # create a new configuration
+            smallConfig = [x_1 + (step * i), y_1 + (step * i)]
+
+            # check to see if we have hit any obstacle
+            for obstacle in Obstacles:
+
+                # make a polygon out of the obstacle
+                polygon = Polygon(obstacle)
+
+                # check to see if we have a collision
+                if polygon.contains(Point(smallConfig[0], smallConfig[1])):
+                    collisions.append(smallConfig)
+
+    return collisions
+
+
+
+
+def findEuclideanDistance(x_1, x_2, y_1, y_2):
+
+    d = math.sqrt(pow(y_2 - y_1, 2) + pow(x_2 - x_1, 2))
+    return d
+
+
 
 if __name__ == "__main__":
     args = parse_args()
@@ -148,36 +198,8 @@ if __name__ == "__main__":
     draw_path(ax, search_result["path"])
     plt.show()
 
-    # me testing
-    # O = [[[-1, -13], [1, -13], [ 1, -11], [-1, -11]], [[-1, 11], [ 1, 11], [ 1, 13], [-1, 13]]]
-    # # O = [[[-1, 11], [1, 11], [1, 13], [-1, 13]]]
-    #
-    # W = 2
-    # L = 12
-    # D = 10
-    # # xI = [60, 30]
-    # xI = (60, 30)
-    # # XG = [60, 150]
-    # XG = (60, 150)
-    #
-    # # testing for task 2
-    # Cobs = compute_Cobs(O, W, L, D)
-    # print(len(Cobs))
-    # print()
-    #
-    # X = compute_Cfree(Cobs)
-    # f = GridStateTransition()
-    # U = Grid2DActions(X, f)
-    #
-    # search_result = fsearch(X, U, f, xI, XG, ALG_BFS)
-    #
-    # result = {"Cobs": Cobs, "path": search_result["path"]}
-    # print(result)
-
-    # with open(args.out, "w") as outfile:
-    #     json.dump(result, outfile)
-    #
-    # fig, ax = plt.subplots()
-    # X.draw(ax, grid_on=False, tick_step=[30, 30])
-    # draw_path(ax, search_result["path"])
-    # plt.show()
+    # task 3
+    print("Starting Task 3")
+    finerPathCollisions = finerCollisionChecking(search_result["path"], O)
+    print(finerPathCollisions)
+    print("Done with Task 3")
