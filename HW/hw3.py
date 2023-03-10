@@ -131,7 +131,7 @@ def finerCollisionChecking(path, Obstacles):
     collisions = []
 
     # variable representing how fine of a discretization we want
-    increment = .5
+    increment = .1
 
     # scroll through the path
     for i in range(len(path) - 1):
@@ -149,8 +149,9 @@ def finerCollisionChecking(path, Obstacles):
         # find the amount you will increment each of the thetas in the config
         step = ((x_2 - x_1) * increment, (y_2 - y_1) * increment)
 
+        r = 1.0 / increment
 
-        for i in range(1, (1 / increment)):
+        for i in range(1, r):
 
             # create a new configuration
             smallConfig = [x_1 + (step * i), y_1 + (step * i)]
@@ -178,6 +179,9 @@ def findEuclideanDistance(x_1, x_2, y_1, y_2):
 
 
 if __name__ == "__main__":
+
+    print("You have entered the main method")
+
     args = parse_args()
     (O, W, L, D, xI, XG, U) = parse_desc(args.desc)
     Cobs = compute_Cobs(O, W, L, D)
