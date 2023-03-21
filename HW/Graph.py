@@ -1,3 +1,7 @@
+import math
+import Vertex
+
+
 class Graph:
     def __init__(self):
         self.vertices = set()
@@ -23,3 +27,16 @@ class Graph:
             elif edge.vertex2 == vertex:
                 adjacent_vertices.add(edge.vertex1)
         return adjacent_vertices
+
+    def getDistanceBetweenVertices(self, vertex1, vertex2):
+
+        p = [vertex1.x, vertex1.y]
+        q = [vertex2.x, vertex2.y]
+
+        dist = math.dist(p, q)
+        return dist
+
+    def getEdges(self):
+        return self.edges
+
+
