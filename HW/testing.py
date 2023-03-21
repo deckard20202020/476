@@ -42,5 +42,9 @@ if __name__ == "__main__":
         print("Vertex1 and Vertex3 are not equal")
     print()
 
+    edge2 = Edge(vertex2, vertex1)
+    print(edge1 == edge2)
+    print()
+
 
 
