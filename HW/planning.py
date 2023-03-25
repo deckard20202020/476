@@ -115,7 +115,14 @@ class Planning:
         return False
 
 
-    def connect(self):
-        # TODO: implement connect in Planning class
-        raise NotImplementedError
+    def connect(self, vertex1, vertex2):
         # connects two points after we find them with RRT or PRM
+
+        # make a vertex3 using the points of vertex2 and assigning its parent as vertex 1
+        vertex2WithParent = Vertex(vertex2.x, vertex2.y, vertex1)
+
+        # make an edge with vertex1 and our new vertex
+        edge = Edge(vertex1, vertex2WithParent)
+
+        # edd the edge to the graph
+        self.graph.add_edge(edge)
