@@ -25,14 +25,7 @@ class Edge:
         raise NotImplementedError
 
     def getNearestPoint(self, point):
-
-        p1 = Point(self.vertex1.x, self.vertex1.y)
-        p2 = Point(self.vertex2.x, self.vertex2.y)
-        p3 = Point(point.x, point.y)
-
-        line = LineString([p1, p2])
-        closest_point = line.interpolate(line.project(p3))
-
+        closest_point = Geometry.getNearestPointOnLine(self.vertex1, self.vertex2, point)
         return closest_point
 
 

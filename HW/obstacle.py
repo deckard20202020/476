@@ -16,7 +16,6 @@ class CircularObstacle(Obstacle):
         return self.center, self.radius
 
     def contains(self, point):
-        # TODO: implement contains in circle obstacle class
         distance = Geometry.getEuclideanDistance(point, self.center)
         # distance = ((point[0] - self.center[0]) ** 2 + (point[1] - self.center[1]) ** 2) ** 0.5
         if distance <= self.radius:

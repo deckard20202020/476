@@ -1,4 +1,5 @@
 import math
+from shapely.geometry import LineString, Point
 
 
 class Geometry:
@@ -6,28 +7,15 @@ class Geometry:
         pass
 
     @staticmethod
-    def getNearestPointOnLine(line_start, line_end, point):
-        # TODO: implement getNearestPointOnLine in geometry class
-        x1, y1 = line_start
-        x2, y2 = line_end
-        x3, y3 = point
+    def getNearestPointOnLine(vertex1, vertex2, point):
+        p1 = Point(vertex1.x, vertex1.y)
+        p2 = Point(vertex2.x, vertex2.y)
+        p3 = Point(point.x, point.y)
 
-        px = x2 - x1
-        py = y2 - y1
+        line = LineString([p1, p2])
+        closest_point = line.interpolate(line.project(p3))
 
-        d = px * px + py * py
-
-        u = ((x3 - x1) * px + (y3 - y1) * py) / float(d)
-
-        if u > 1:
-            u = 1
-        elif u < 0:
-            u = 0
-
-        x = x1 + u * px
-        y = y1 + u * py
-
-        return x, y
+        return closest_point
 
     @staticmethod
     def getEuclideanDistance(point1, point2):
