@@ -1,3 +1,6 @@
+from HW.geometry import Geometry
+
+
 class Edge:
     def __init__(self, vertex1, vertex2):
         self.vertex1 = vertex1
@@ -13,8 +16,7 @@ class Edge:
         return hash((self.vertex1, self.vertex2))
 
     def reverse(self):
-        # TODO: implement reverse in edge class
-        raise NotImplementedError
+        return Edge(self.vertex2, self.vertex1)
 
     def getDiscritizedState(self):
         # TODO: implement getDiscritizedState in edge class
@@ -27,7 +29,9 @@ class Edge:
     def split(self):
         # TODO: implement split in edge class
         raise NotImplementedError
+        # parameters should be an edge and a point
+        # should we remove the old edge and create two new edges with the 3 points or just add the new edges???
 
     def getLength(self):
-        # TODO: implement getLength in edge class
-        raise NotImplementedError
+        distance = Geometry.getEuclideanDistance(self.vertex1, self.vertex2)
+        return distance

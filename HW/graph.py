@@ -1,38 +1,42 @@
-import math
-import vertex
+from HW.edge import Edge
 from HW.geometry import Geometry
-
 
 class Graph:
     def __init__(self):
-        self.vertices = set()
-        self.edges = set()
+        self.vertices = {}
+        self.adj_list = {}
 
     def add_vertex(self, vertex):
-        self.vertices.add(vertex)
+        if vertex not in self.vertices:
+            self.vertices[vertex] = True
+            self.adj_list[vertex] = []
 
     def add_edge(self, edge):
-        self.edges.add(edge)
+        self.add_vertex(edge.vertex1)
+        self.add_vertex(edge.vertex2)
+        if edge.vertex2 not in self.adj_list[edge.vertex1]:
+            self.adj_list[edge.vertex1].append(edge.vertex2)
+        if edge.vertex1 not in self.adj_list[edge.vertex2]:
+            self.adj_list[edge.vertex2].append(edge.vertex1)
 
-    def remove_vertex(self, vertex):
-        self.vertices.remove(vertex)
-
-    def remove_edge(self, edge):
-        self.edges.remove(edge)
+        # TODO: do we need to reverse the edge and add that as well???
 
     def get_adjacent_vertices(self, vertex):
-        adjacent_vertices = set()
-        for edge in self.edges:
-            if edge.vertex1 == vertex:
-                adjacent_vertices.add(edge.vertex2)
-            elif edge.vertex2 == vertex:
-                adjacent_vertices.add(edge.vertex1)
-        return adjacent_vertices
+        return self.adj_list[vertex]
 
     def getDistanceBetweenVertices(self, vertex1, vertex2):
         return Geometry.getEuclideanDistance((vertex1.x, vertex1.y), (vertex2.x, vertex2.y))
 
-    def getEdges(self):
-        return self.edges
+    def get_edges(self):
+        edges = []
+        for vertex in self.adj_list:
+            for adj_vertex in self.adj_list[vertex]:
+                edges.append(Edge(vertex, adj_vertex))
+        return edges
+
+    def get_vertices(self):
+        return list(self.vertices.keys())
+
+
 
 
