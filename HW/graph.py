@@ -19,7 +19,14 @@ class Graph:
         if edge.vertex1 not in self.adj_list[edge.vertex2]:
             self.adj_list[edge.vertex2].append(edge.vertex1)
 
-        # TODO: do we need to reverse the edge and add that as well???
+        # add the reversed edge since edges are bi-directional
+        reversedEdge = Edge.reverse(edge)
+        self.add_vertex(reversedEdge.vertex1)
+        self.add_vertex(reversedEdge.vertex2)
+        if reversedEdge.vertex2 not in self.adj_list[reversedEdge.vertex1]:
+            self.adj_list[reversedEdge.vertex1].append(reversedEdge.vertex2)
+        if reversedEdge.vertex1 not in self.adj_list[reversedEdge.vertex2]:
+            self.adj_list[reversedEdge.vertex2].append(reversedEdge.vertex1)
 
     def get_adjacent_vertices(self, vertex):
         return self.adj_list[vertex]
