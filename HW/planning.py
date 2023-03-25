@@ -57,3 +57,30 @@ class Planning:
                 # check if collision checking is required based on obstacle presence and position
                 # ...
                 return True
+
+    def RRT(self):
+        # TODO: implement RRT in planning class
+        raise NotImplementedError
+
+    def PRM(self):
+        # TODO: implement PRM in planning class
+        raise NotImplementedError
+
+    def getRandomPoint(self):
+        # TODO: implement getRandomPoint in Planning class
+        raise NotImplementedError
+
+    def getRandomNumber(self, n):
+        # TODO: implement getRandomNumber in Planning class
+        raise NotImplementedError
+
+    def stopConfiguration(self):
+        # TODO: implement stopConfiguration in Planning class
+        raise NotImplementedError
+        # figure out if we are close to the goal
+
+    def connect(self):
+        # TODO: implement connect in Planning class
+        raise NotImplementedError
+        # connects two points after we find them with RRT or PRM
+    
