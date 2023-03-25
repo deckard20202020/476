@@ -1,3 +1,6 @@
+import random
+
+
 class Planning:
     def __init__(self):
         pass
@@ -70,9 +73,10 @@ class Planning:
         # TODO: implement getRandomPoint in Planning class
         raise NotImplementedError
 
-    def getRandomNumber(self, n):
+    def getRandomNumber(n):
         # TODO: implement getRandomNumber in Planning class
-        raise NotImplementedError
+        # raise NotImplementedError
+        return random.randint(1, n)
 
     def stopConfiguration(self):
         # TODO: implement stopConfiguration in Planning class
@@ -83,4 +87,3 @@ class Planning:
         # TODO: implement connect in Planning class
         raise NotImplementedError
         # connects two points after we find them with RRT or PRM
-    
