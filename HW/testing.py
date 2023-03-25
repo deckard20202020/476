@@ -51,18 +51,12 @@ if __name__ == "__main__":
 
     g = Graph()
 
-    vertex1 = makeAVertex(0, 0, None)
-    vertex2 = makeAVertex(0, 1, vertex1)
-    dist = g.getDistanceBetweenVertices(vertex1, vertex2)
-    print(dist)
-    print()
+    vertex1 = makeAVertex(-1, 0, None)
+    vertex2 = makeAVertex(1, 0, vertex1)
+    edge = Edge(vertex1, vertex2)
+    point = makeAVertex(0, 1, None)
+    print(edge.getNearestPoint(point))
 
-    vertex3 = makeAVertex(1,1,None)
-    dist = g.getDistanceBetweenVertices(vertex1, vertex3)
-    print(dist)
-    print()
-
-    print(math.sqrt(2))
 
 
 

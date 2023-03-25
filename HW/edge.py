@@ -1,4 +1,6 @@
 from HW.geometry import Geometry
+from shapely.geometry import LineString, Point
+from shapely.ops import nearest_points
 
 
 class Edge:
@@ -22,9 +24,19 @@ class Edge:
         # TODO: implement getDiscritizedState in edge class
         raise NotImplementedError
 
-    def getNearestPoint(self):
+    def getNearestPoint(self, point):
         # TODO: implement getNearestPoint in edge class
-        raise NotImplementedError
+        # raise NotImplementedError
+
+        p1 = Point(self.vertex1.x, self.vertex1.y)
+        p2 = Point(self.vertex2.x, self.vertex2.y)
+        p3 = Point(point.x, point.y)
+
+        line = LineString([p1, p2])
+        closest_point = line.interpolate(line.project(p3))
+
+        return closest_point
+
 
     def split(self):
         # TODO: implement split in edge class
