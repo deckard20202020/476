@@ -2,6 +2,8 @@ from HW.geometry import Geometry
 from shapely.geometry import LineString, Point
 from shapely.ops import nearest_points
 
+from HW.vertex import Vertex
+
 
 class Edge:
     def __init__(self, vertex1, vertex2):
@@ -20,20 +22,74 @@ class Edge:
     def reverse(self):
         return Edge(self.vertex2, self.vertex1)
 
-    def getDiscritizedState(self):
-        # TODO: implement getDiscritizedState in edge class
-        raise NotImplementedError
+    def getDiscritizedState(self, stepSize):
+        # takes in a step size
+        # returns a list of steps
+        # this method will not return the last point on the edge
+        # That should be ok since I dont think we will use this method
+        # unless we have hit an obstacle
+
+        point1 = Point(self.vertex1.x, self.vertex1.y)
+        point2 = Point(self.vertex2.x, self.vertex2.y)
+        line = LineString([point1, point2])
+        length = line.length
+        num_segments = int(length / stepSize) + 1
+
+        points = [line.interpolate(i * stepSize) for i in range(num_segments)]
+        # Shapely points are represented as (x, y) tuples
+        vertices = [Vertex(point.x, point.y) for point in points]
+
+        return vertices
+
+        # def getDiscritizedState(self, stepSize):
+        #     # calculate the length of the edge
+        #     length = self.getLength()
+        #
+        #     # calculate the number of steps needed
+        #     num_steps = int(length / stepSize) + 1
+        #
+        #     # calculate the step size needed to get evenly spaced points on the edge
+        #     dx = (self.vertex2[0] - self.vertex1[0]) / (num_steps - 1)
+        #     dy = (self.vertex2[1] - self.vertex1[1]) / (num_steps - 1)
+        #
+        #     # create an array of vertices to store the discretized edge
+        #     vertices = array.array('d')
+        #
+        #     # add the first vertex to the array
+        #     vertices.append(self.vertex1[0])
+        #     vertices.append(self.vertex1[1])
+        #
+        #     # add the rest of the vertices to the array
+        #     for i in range(1, num_steps - 1):
+        #         x = self.vertex1[0] + i * dx
+        #         y = self.vertex1[1] + i * dy
+        #         vertices.append(x)
+        #         vertices.append(y)
+        #
+        #     # add the last vertex to the array
+        #     vertices.append(self.vertex2[0])
+        #     vertices.append(self.vertex2[1])
+        #
+        #     return vertices
 
     def getNearestPoint(self, point):
         closest_point = Geometry.getNearestPointOnLine(self.vertex1, self.vertex2, point)
         return closest_point
 
 
-    def split(self):
-        # TODO: implement split in edge class
-        raise NotImplementedError
-        # parameters should be an edge and a point
+    def split(self, point):
         # should we remove the old edge and create two new edges with the 3 points or just add the new edges???
+
+        # make two new edges
+        firstEdge = Edge(self.vertex1, point)
+        secondEdge = Edge(point, self.vertex2)
+
+        # TODO: when you use split in algorigthm
+        # add those two edges to the graph
+        # first edge has the parent of the original edge
+        # second edge has the first edge as a parent
+
+        return [firstEdge, secondEdge]
 
     def getLength(self):
         distance = Geometry.getEuclideanDistance(self.vertex1, self.vertex2)

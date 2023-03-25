@@ -52,10 +52,16 @@ if __name__ == "__main__":
     g = Graph()
 
     vertex1 = makeAVertex(-1, 0, None)
-    vertex2 = makeAVertex(1, 0, vertex1)
+    vertex2 = makeAVertex(-1.2, 0, vertex1)
     edge = Edge(vertex1, vertex2)
     point = makeAVertex(0, 1, None)
     print(edge.getNearestPoint(point))
+
+    listOfVerticies = edge.getDiscritizedState(.1)
+    # for i in range(listOfVerticies):
+    #     print(listOfVerticies[i].x + " " + listOfVerticies[i].y)
+    for vertex in listOfVerticies:
+        print(f"x: {vertex.x}, y: {vertex.y}")
 
 
 
