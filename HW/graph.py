@@ -1,5 +1,5 @@
 import math
-import Vertex
+import vertex
 
 
 class Graph:

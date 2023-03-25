@@ -1,6 +1,6 @@
-from Vertex import Vertex
-from Graph import Graph
-from Edge import Edge
+from vertex import Vertex
+from graph import Graph
+from edge import Edge
 
 def makeAVertex(x, y, p):
     v = Vertex(x, y, p)
