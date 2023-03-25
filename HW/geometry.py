@@ -30,10 +30,12 @@ class Geometry:
     @staticmethod
     def isInsideCircle(center, radius, point):
 
-        x1, y1 = center
-        x2, y2 = point
+        # x1, y1 = center
+        # x2, y2 = point
+        #
+        # distance = Geometry.getEuclideanDistance((x1, y1), (x2, y2))
 
-        distance = Geometry.getEuclideanDistance((x1, y1), (x2, y2))
+        distance = Geometry.getEuclideanDistance(center, point)
 
         if distance <= radius:
             return True
