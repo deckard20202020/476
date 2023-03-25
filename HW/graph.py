@@ -1,5 +1,6 @@
 import math
 import vertex
+from HW.geometry import Geometry
 
 
 class Graph:
@@ -29,12 +30,7 @@ class Graph:
         return adjacent_vertices
 
     def getDistanceBetweenVertices(self, vertex1, vertex2):
-
-        p = [vertex1.x, vertex1.y]
-        q = [vertex2.x, vertex2.y]
-
-        dist = math.dist(p, q)
-        return dist
+        return Geometry.getEuclideanDistance((vertex1.x, vertex1.y), (vertex2.x, vertex2.y))
 
     def getEdges(self):
         return self.edges
