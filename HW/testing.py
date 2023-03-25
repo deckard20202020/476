@@ -1,6 +1,7 @@
 import math
 
 from HW import geometry, graph, planning
+from HW.geometry import Geometry
 from planning import Planning
 from vertex import Vertex
 from graph import Graph
@@ -68,10 +69,30 @@ if __name__ == "__main__":
     #     randomNumber = Planning.getRandomNumber(1, 10)
     #     print(randomNumber)
 
-    for i in range(100):
-        planning = Planning(-3, 3, -1, 1)
-        randomVertex = planning.getRandomPoint()
-        print(f"x: {randomVertex.x}, y: {randomVertex.y}")
+    # for i in range(100):
+    #     planning = Planning(-3, 3, -1, 1)
+    #     randomVertex = planning.getRandomPoint()
+    #     print(f"x: {randomVertex.x}, y: {randomVertex.y}")
+
+    # point1 = Vertex(0,1)
+    # point2 = Vertex(0,0)
+    # dist = Geometry.getEuclideanDistance(point1, point2)
+    # print(dist)
+
+    start = Vertex(0,0)
+    goal = Vertex(0,1)
+    planning = Planning(-3, 3, -1, 1, .5, start, goal)
+    point1 = Vertex(0, .1)
+    edge = Edge(start, point1)
+    planning.graph.add_edge(edge)
+    haveWeMadeIt1 = planning.stopConfiguration()
+    print(haveWeMadeIt1)
+    print()
+    point2 = Vertex(0, .6, point1)
+    edge2 = Edge(point1, point2)
+    planning.graph.add_edge(edge2)
+    haveWeMadeIt2 = planning.stopConfiguration()
+    print(haveWeMadeIt2)
 
 
 

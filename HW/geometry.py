@@ -19,8 +19,13 @@ class Geometry:
 
     @staticmethod
     def getEuclideanDistance(point1, point2):
-        x1, y1 = point1
-        x2, y2 = point2
+        # x1, y1 = point1
+        # x2, y2 = point2
+
+        x1 = point1.x
+        y1 = point1.y
+        x2 = point2.x
+        y2 = point2.y
 
         dx = x2 - x1
         dy = y2 - y1
