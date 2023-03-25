@@ -1,9 +1,14 @@
 import random
 
+from HW.vertex import Vertex
+
 
 class Planning:
-    def __init__(self):
-        pass
+    def __init__(self, xmin, xmax, ymin, ymax):
+        self.xmin = xmin
+        self.xmax = xmax
+        self.ymin = ymin
+        self.ymax = ymax
 
     class EdgeCreator:
         def __init__(self):
@@ -69,14 +74,25 @@ class Planning:
         # TODO: implement PRM in planning class
         raise NotImplementedError
 
-    def getRandomPoint(self):
-        # TODO: implement getRandomPoint in Planning class
-        raise NotImplementedError
 
-    def getRandomNumber(n):
-        # TODO: implement getRandomNumber in Planning class
-        # raise NotImplementedError
-        return random.randint(1, n)
+    def getRandomPoint(self):
+        # this implementation will give a precision of x.x
+
+        # get a random x value
+        x = Planning.getRandomNumber(self.xmin * 10, self.xmax * 10)
+        xvalue = x / 10
+
+        # get a random y value
+        y = Planning.getRandomNumber(self.ymin * 10, self.ymax * 10)
+        yvalue = y / 10
+
+        # make a new vertex
+        vertex = Vertex(xvalue, yvalue)
+        return vertex
+
+
+    def getRandomNumber(min, max):
+        return random.randint(min, max)
 
     def stopConfiguration(self):
         # TODO: implement stopConfiguration in Planning class

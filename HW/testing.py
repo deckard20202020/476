@@ -64,9 +64,14 @@ if __name__ == "__main__":
     # for vertex in listOfVerticies:
     #     print(f"x: {vertex.x}, y: {vertex.y}")
 
+    # for i in range(100):
+    #     randomNumber = Planning.getRandomNumber(1, 10)
+    #     print(randomNumber)
+
     for i in range(100):
-        randomNumber = Planning.getRandomNumber(10)
-        print(randomNumber)
+        planning = Planning(-3, 3, -1, 1)
+        randomVertex = planning.getRandomPoint()
+        print(f"x: {randomVertex.x}, y: {randomVertex.y}")
 
 
 
