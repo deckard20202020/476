@@ -29,7 +29,7 @@ class Geometry:
 
     @staticmethod
     def isInsideCircle(center, radius, point):
-        # TODO: double check isInsideCircle method in geometry
+
         x1, y1 = center
         x2, y2 = point
 

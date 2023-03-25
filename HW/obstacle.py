@@ -1,3 +1,4 @@
+from HW import geometry
 from HW.geometry import Geometry
 
 class Obstacle:
@@ -16,11 +17,13 @@ class CircularObstacle(Obstacle):
         return self.center, self.radius
 
     def contains(self, point):
-        distance = Geometry.getEuclideanDistance(point, self.center)
-        # distance = ((point[0] - self.center[0]) ** 2 + (point[1] - self.center[1]) ** 2) ** 0.5
-        if distance <= self.radius:
-            return True
-        return False
+        return geometry.isInsideCircle(self.center, self.radius, point)
+        
+        # distance = Geometry.getEuclideanDistance(point, self.center)
+        # # distance = ((point[0] - self.center[0]) ** 2 + (point[1] - self.center[1]) ** 2) ** 0.5
+        # if distance <= self.radius:
+        #     return True
+        # return False
 
 
 class WorldBoundary2D(Obstacle):
