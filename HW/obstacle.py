@@ -1,5 +1,4 @@
 from HW import geometry
-from HW.geometry import Geometry
 
 class Obstacle:
     def contains(self, point):

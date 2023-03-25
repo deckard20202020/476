@@ -1,6 +1,5 @@
 from HW.geometry import Geometry
 from shapely.geometry import LineString, Point
-from shapely.ops import nearest_points
 
 from HW.vertex import Vertex
 
@@ -78,7 +77,6 @@ class Edge:
 
 
     def split(self, point):
-        # should we remove the old edge and create two new edges with the 3 points or just add the new edges???
 
         # make two new edges
         firstEdge = Edge(self.vertex1, point)
@@ -88,6 +86,7 @@ class Edge:
         # add those two edges to the graph
         # first edge has the parent of the original edge
         # second edge has the first edge as a parent
+        # should we remove the old edge and create two new edges with the 3 points or just add the new edges???
 
         return [firstEdge, secondEdge]
 
