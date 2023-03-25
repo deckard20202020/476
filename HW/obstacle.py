@@ -1,18 +1,12 @@
 from HW.geometry import Geometry
 
 class Obstacle:
-    def __init__(self, name):
-        self.name = name
-        # TODO: implement Obstacle init in edge class
-        raise NotImplementedError
-
     def contains(self, point):
         raise NotImplementedError
 
 
 class CircularObstacle(Obstacle):
-    def __init__(self, name, center, radius):
-        super().__init__(name)
+    def __init__(self, center, radius):
         self.center = center
         self.radius = radius
 
@@ -31,8 +25,7 @@ class CircularObstacle(Obstacle):
 
 
 class WorldBoundary2D(Obstacle):
-    def __init__(self, name, x_min, x_max, y_min, y_max):
-        super().__init__(name)
+    def __init__(self, x_min, x_max, y_min, y_max):
         self.x_min = x_min
         self.x_max = x_max
         self.y_min = y_min

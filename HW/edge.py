@@ -25,8 +25,6 @@ class Edge:
         raise NotImplementedError
 
     def getNearestPoint(self, point):
-        # TODO: implement getNearestPoint in edge class
-        # raise NotImplementedError
 
         p1 = Point(self.vertex1.x, self.vertex1.y)
         p2 = Point(self.vertex2.x, self.vertex2.y)
