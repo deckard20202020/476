@@ -185,6 +185,10 @@ class Planning:
                 for e in splitEdges:
                     self.graph.add_edge(e)
 
+                # add the edge from the split point to the ai
+                newEdge = Edge(closestPointOnEdge, ai)
+                self.graph.add_edge(newEdge)
+
             # Check to see if we have found the goal
             if ai == self.goal:
                 break
