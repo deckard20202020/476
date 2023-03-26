@@ -1,4 +1,7 @@
 import math
+import numpy as np
+
+from matplotlib import pyplot as plt, patches
 
 from HW import geometry, graph, planning
 from HW.geometry import Geometry
@@ -102,23 +105,50 @@ if __name__ == "__main__":
     # haveWeMadeIt = planning.stopConfiguration()
     # print(haveWeMadeIt)
 
-    graph = Graph()
-    stepSize = .1
+    # graph = Graph()
+    # stepSize = .1
+    #
+    # point1 = Vertex(0, 0)
+    # point2 = Vertex(1, 0)
+    # point3 = Vertex(2, 0)
+    # edge1 = Edge(point1, point2)
+    # edge2 = Edge(point2, point3)
+    # graph.add_edge(edge1)
+    # graph.add_edge(edge2)
+    #
+    # randomPoint1 = Vertex(2, 1)
+    # closest_edge = Geometry.findClosestEdgeOnGraph(graph, randomPoint1, stepSize)
+    # vertex1 = closest_edge.vertex1
+    # vertex2 = closest_edge.vertex2
+    # print(f"x: {vertex1.x}, y: {vertex1.y}")
+    # print(f"x: {vertex2.x}, y: {vertex2.y}")
 
-    point1 = Vertex(0, 0)
-    point2 = Vertex(1, 0)
-    point3 = Vertex(2, 0)
-    edge1 = Edge(point1, point2)
-    edge2 = Edge(point2, point3)
-    graph.add_edge(edge1)
-    graph.add_edge(edge2)
+    # set up the bounds of the window
+    xmin, xmax, ymin, ymax = -3, 3, -1, 1
 
-    randomPoint1 = Vertex(2, 1)
-    closest_edge = Geometry.findClosestEdgeOnGraph(graph, randomPoint1, stepSize)
-    vertex1 = closest_edge.vertex1
-    vertex2 = closest_edge.vertex2
-    print(f"x: {vertex1.x}, y: {vertex1.y}")
-    print(f"x: {vertex2.x}, y: {vertex2.y}")
+    # set up the circle parameters
+    circle1_center = [0, 1]
+    circle2_center = [0, -1]
+    circle_radius = .5
+
+    # set up the x and y values for the circles
+    t = np.linspace(0, np.pi, 1000)
+    x1 = circle1_center[0] + circle_radius * np.cos(t)
+    y1 = circle1_center[1] + circle_radius * -np.sin(t)
+    x2 = circle2_center[0] + circle_radius * np.cos(t)
+    y2 = circle2_center[1] + circle_radius * np.sin(t)
+
+    # create the plot
+    fig, ax = plt.subplots()
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([ymin, ymax])
+
+    # plot the circles
+    ax.plot(x1, y1, color='red')
+    ax.plot(x2, y2, color='red')
+
+    # show the plot
+    plt.show()
 
 
 

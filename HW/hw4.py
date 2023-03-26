@@ -1,4 +1,5 @@
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, patches
+import numpy as np
 
 from HW.planning import Planning
 from HW.vertex import Vertex
@@ -126,7 +127,7 @@ def draw_cspace(ax, cspace, obstacles, tick_step=[1, 1]):
 
 
 # def printResults(obstacles: list):
-def printResults(xmin, xmax, ymin, ymax, graph, obstacles, start, goal):
+def printResults(xmin, xmax, ymin, ymax, graph, obstacles, start, goal, dt):
     # x1, y1 = obstacles[0].exterior.xy
     # x2, y2 = obstacles[1].exterior.xy
     # print()
@@ -139,6 +140,30 @@ def printResults(xmin, xmax, ymin, ymax, graph, obstacles, start, goal):
 
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+
+    # set up the circle parameters
+    circle1_center = [0, 1]
+    circle2_center = [0, -1]
+    circle_radius = 1 - dt
+
+    # set up the x and y values for the circles
+    t = np.linspace(0, np.pi, 1000)
+    x1 = circle1_center[0] + circle_radius * np.cos(t)
+    y1 = circle1_center[1] + circle_radius * -np.sin(t)
+    x2 = circle2_center[0] + circle_radius * np.cos(t)
+    y2 = circle2_center[1] + circle_radius * np.sin(t)
+
+    # create the plot
+    fig, ax = plt.subplots()
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([ymin, ymax])
+
+    # plot the circles
+    ax.plot(x1, y1, color='red')
+    ax.plot(x2, y2, color='red')
 
     # plot each verticies
     for v in graph.get_vertices():
@@ -188,8 +213,9 @@ if __name__ == "__main__":
     start = Vertex(-2, -0.5)
     goal = Vertex(2, -0.5)
     stepSize = .1
+    dt = .1
 
     graph = main_rrt(xmin, xmax, ymin, ymax, start, goal, stepSize)
 
     obstacles = None
-    printResults(xmin, xmax, ymin, ymax, graph, obstacles, start, goal)
+    printResults(xmin, xmax, ymin, ymax, graph, obstacles, start, goal, dt)
