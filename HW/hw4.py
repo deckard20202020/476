@@ -1,3 +1,7 @@
+from HW.planning import Planning
+from HW.vertex import Vertex
+
+
 def parse_args():
     # TODO: implement parse_args in hw4
     raise NotImplementedError
@@ -39,9 +43,11 @@ def parse_args():
     #
     # return args
 
-def main_rrt():
+def main_rrt(xmin, xmax, ymin, ymax, start, goal, stepSize):
     # TODO: implement main_rrt in hw4
-    raise NotImplementedError
+    plan = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize)
+    graph = plan.RRT()
+    return graph
 
 def main_prm():
     # TODO: implement main_prm in hw4
@@ -50,4 +56,13 @@ def main_prm():
 if __name__ == "__main__":
     # input is just the algorithm RRT or PRM
     # output should be the picture
+    xmin = -3
+    xmax = 3
+    ymin = -1
+    ymax = 1
+    start = Vertex(-2, -0.5)
+    goal = Vertex(2, -0.5)
+    stepSize = .1
+
+    graph = main_rrt(xmin, xmax, ymin, ymax, start, goal, stepSize)
     a = 1

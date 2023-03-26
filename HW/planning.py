@@ -1,6 +1,5 @@
 import random
 
-from HW import geometry
 from HW.edge import Edge
 from HW.geometry import Geometry
 from HW.graph import Graph
@@ -8,12 +7,11 @@ from HW.vertex import Vertex
 
 
 class Planning:
-    def __init__(self, xmin, xmax, ymin, ymax, goalRadius, start, goal, stepSize):
+    def __init__(self, xmin, xmax, ymin, ymax, start, goal, stepSize):
         self.xmin = xmin
         self.xmax = xmax
         self.ymin = ymin
         self.ymax = ymax
-        self.goalRadius = goalRadius
         self.start = start
         self.goal = goal
         self.stepSize = stepSize
@@ -44,7 +42,7 @@ class Planning:
         def euclideanDistanceComputator(self, vertex1, vertex2):
             # TODO: implement euclideanDistanceComputator in planning class
             # what will I use this for???
-            return geometry.getEuclideanDistance(vertex1, vertex2)
+            return Geometry.getEuclideanDistance(vertex1, vertex2)
             # return ((vertex1[0] - vertex2[0]) ** 2 + (vertex1[1] - vertex2[1]) ** 2) ** 0.5
 
     class collisionChecker:
@@ -84,14 +82,15 @@ class Planning:
 
 
     def getRandomPoint(self):
+        # TODO: Do I need to gt random points based on the random method in class???
         # this implementation will give a precision of x.x
 
         # get a random x value
-        x = Planning.getRandomNumber(self.xmin * 10, self.xmax * 10)
+        x = self.getRandomNumber(self.xmin * 10, self.xmax * 10)
         xvalue = x / 10
 
         # get a random y value
-        y = Planning.getRandomNumber(self.ymin * 10, self.ymax * 10)
+        y = self.getRandomNumber(self.ymin * 10, self.ymax * 10)
         yvalue = y / 10
 
         # make a new vertex
@@ -99,17 +98,17 @@ class Planning:
         return vertex
 
 
-    def getRandomNumber(min, max):
+    def getRandomNumber(self, min, max):
         return random.randint(min, max)
 
-    def stopConfiguration(self):
-        # figure out if we are close enough to the goal
-        for vertex in self.graph.vertices:
-            distance = Geometry.getEuclideanDistance(vertex, self.goal)
-            if distance <= self.goalRadius:
-                return True
-
-        return False
+    # def stopConfiguration(self):
+    #     # figure out if we are close enough to the goal
+    #     for vertex in self.graph.vertices:
+    #         distance = Geometry.getEuclideanDistance(vertex, self.goal)
+    #         if distance <= self.goalRadius:
+    #             return True
+    #
+    #     return False
 
 
     def connect(self, vertex1, vertex2):
@@ -124,35 +123,78 @@ class Planning:
         # edd the edge to the graph
         self.graph.add_edge(edge)
 
-    # def RRT(self):
-    #     # TODO: implement RRT in planning class
-    #     # raise NotImplementedError
-    #
-    #     collision_checker = Planning.collisionChecker.emptyCollisionChecker()
-    #
-    #     # RDT(q0):
-    #         # G.init(q0);
-    #         self.graph.add_vertex(self.start)
-    #         # for i = 1 to k do
-    #         for i in range(1000):
-    #
-    #             # qn ← nearest(S, α(i));
-    #             ai = self.getRandomPoint()
-    #
-    #             # if we are in collision
-    #             if (collision_checker(ai) == True):
-    #                 a = 1
-    #                 #discritise the line and find where we are not in collision
-    #             else:
-    #                 # find the closest edge on the graph
-    #                 # find the closest point on the edge sending the step size
-    #                 # split the edge
-    #                 #
-    #
-    #             # qs ← stopping - configuration(qn, α(i));
-    #             # if qs != qn then
-    #                 # G.add vertex(qs);
-    #                 # G.add edge(qn, qs);
+    def RRT(self):
+        # TODO: implement RRT in planning class
+        # raise NotImplementedError
+
+        collision_checker = self.collisionChecker.emptyCollisionChecker()
+
+
+        # G.init(q0);
+        self.graph.add_vertex(self.start)
+
+        # the first time around we don't have any edges so we need to add one.
+        randomNumber = self.getRandomNumber(1, 10)
+        if randomNumber == 1:
+            ai = self.goal
+        else:
+            ai = self.getRandomPoint()
+
+        if (collision_checker.isInCollision(ai) == True):
+            # discritise the line and find where we are not in collision
+            a = 1
+        else:
+
+            # make an edge
+            edge = Edge(self.start, ai)
+            # add the edge to the graph
+            self.graph.add_edge(edge)
+
+        # Check to see if we have found the goal
+        if ai == self.goal:
+            return self.graph
+
+
+        # for i = 1 to k do
+        for i in range(1000):
+
+            # qn ← nearest(S, α(i));
+            ai = -1
+            # we should use the goal as ai 10% of the time
+            randomNumber = self.getRandomNumber(1, 10)
+            if randomNumber == 1:
+                ai = self.goal
+            else:
+                ai = self.getRandomPoint()
+
+            # if we are in collision
+            if (collision_checker.isInCollision(ai) == True):
+                #discritise the line and find where we are not in collision
+                a = 1
+            else:
+                # find the closest edge on the graph
+                closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+                # find the closest point on the edge sending the step size
+                closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+                # split the edge
+                splitEdges = closestEdge.split(closestPointOnEdge)
+
+                # add the split edges to the graph
+                for e in splitEdges:
+                    self.graph.add_edge(e)
+
+            # Check to see if we have found the goal
+            if ai == self.goal:
+                break
+
+        return self.graph
+
+            # qs ← stopping - configuration(qn, α(i));
+            # if qs != qn then
+                # G.add vertex(qs);
+                # G.add edge(qn, qs);
 
     def PRM(self):
         # TODO: implement PRM in planning class

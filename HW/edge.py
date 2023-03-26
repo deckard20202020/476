@@ -73,7 +73,7 @@ class Edge:
         #     return vertices
 
     def getNearestPoint(self, point):
-        closest_point = Geometry.getNearestPointOnLine(self.vertex1, self.vertex2, point)
+        closest_point = Geometry.getNearestVertexOnLine(self.vertex1, self.vertex2, point)
         return closest_point
 
 

@@ -9,15 +9,18 @@ class Geometry:
         pass
 
     @staticmethod
-    def getNearestPointOnLine(vertex1, vertex2, point):
+    def getNearestVertexOnLine(vertex1, vertex2, point):
         p1 = Point(vertex1.x, vertex1.y)
         p2 = Point(vertex2.x, vertex2.y)
         p3 = Point(point.x, point.y)
 
         line = LineString([p1, p2])
-        closest_point = line.interpolate(line.project(p3))
+        closestPoint = line.interpolate(line.project(p3))
 
-        return closest_point
+        #convert to a vertex
+        closestVertex = Vertex(closestPoint.x, closestPoint.y)
+
+        return closestVertex
 
     @staticmethod
     def getEuclideanDistance(point1, point2):
