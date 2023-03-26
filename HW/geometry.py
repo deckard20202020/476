@@ -1,6 +1,8 @@
 import math
 from shapely.geometry import LineString, Point
 
+from HW.vertex import Vertex
+
 
 class Geometry:
     def __init__(self):
@@ -46,3 +48,24 @@ class Geometry:
             return True
         else:
             return False
+
+    @staticmethod
+    def findClosestEdgeOnGraph(graph, point, stepSize):
+        # TODO: implement findClosestEdgeOnGraph
+        shortestDistance = float('inf')
+        closestEdge = None
+
+        for edge in graph.get_edges():
+            # discritize the edge
+            segments = edge.getDiscritizedState(stepSize)
+
+
+            for segment in segments:
+                segmentPoint = Vertex(segment.x, segment.y)
+                distance = Geometry.getEuclideanDistance(point, segmentPoint)
+                if (distance < shortestDistance):
+                    shortestDistance = distance
+                    closestEdge = edge
+
+        return closestEdge
+

@@ -25,6 +25,7 @@ class Edge:
         # takes in a step size
         # returns a list of steps
         # this method will not return the last point on the edge
+        # TODO: edit getDiscritizedState to include the last point on the line
         # That should be ok since I dont think we will use this method
         # unless we have hit an obstacle
 

@@ -94,13 +94,31 @@ if __name__ == "__main__":
     # haveWeMadeIt2 = planning.stopConfiguration()
     # print(haveWeMadeIt2)
 
-    start = Vertex(0,0)
-    goal = Vertex(0,1)
-    planning = Planning(-3, 3, -1, 1, .5, start, goal)
-    point2 = Vertex(0, .6, start)
-    planning.connect(start, point2)
-    haveWeMadeIt = planning.stopConfiguration()
-    print(haveWeMadeIt)
+    # start = Vertex(0,0)
+    # goal = Vertex(0,1)
+    # planning = Planning(-3, 3, -1, 1, .5, start, goal)
+    # point2 = Vertex(0, .6, start)
+    # planning.connect(start, point2)
+    # haveWeMadeIt = planning.stopConfiguration()
+    # print(haveWeMadeIt)
+
+    graph = Graph()
+    stepSize = .1
+
+    point1 = Vertex(0, 0)
+    point2 = Vertex(1, 0)
+    point3 = Vertex(2, 0)
+    edge1 = Edge(point1, point2)
+    edge2 = Edge(point2, point3)
+    graph.add_edge(edge1)
+    graph.add_edge(edge2)
+
+    randomPoint1 = Vertex(2, 1)
+    closest_edge = Geometry.findClosestEdgeOnGraph(graph, randomPoint1, stepSize)
+    vertex1 = closest_edge.vertex1
+    vertex2 = closest_edge.vertex2
+    print(f"x: {vertex1.x}, y: {vertex1.y}")
+    print(f"x: {vertex2.x}, y: {vertex2.y}")
 
 
 

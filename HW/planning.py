@@ -8,7 +8,7 @@ from HW.vertex import Vertex
 
 
 class Planning:
-    def __init__(self, xmin, xmax, ymin, ymax, goalRadius, start, goal):
+    def __init__(self, xmin, xmax, ymin, ymax, goalRadius, start, goal, stepSize):
         self.xmin = xmin
         self.xmax = xmax
         self.ymin = ymin
@@ -16,6 +16,7 @@ class Planning:
         self.goalRadius = goalRadius
         self.start = start
         self.goal = goal
+        self.stepSize = stepSize
         self.graph = Graph()
 
     class EdgeCreator:
@@ -65,8 +66,12 @@ class Planning:
             def isInCollision(self, point):
                 # TODO: implement isInCollision in planning class
                 # check if point is within obstacle boundaries
+                # check to see if we have hit any obstacles
                 # find closest point
                 # ...
+                # for each of the obstacles-in this case circles
+                    #check to see if the point or edge (after discritized) is in collision
+
                 return True
 
             def isCheckingRequired(self):
@@ -76,14 +81,6 @@ class Planning:
                 # check if collision checking is required based on obstacle presence and position
                 # ...
                 return True
-
-    def RRT(self):
-        # TODO: implement RRT in planning class
-        raise NotImplementedError
-
-    def PRM(self):
-        # TODO: implement PRM in planning class
-        raise NotImplementedError
 
 
     def getRandomPoint(self):
@@ -126,3 +123,37 @@ class Planning:
 
         # edd the edge to the graph
         self.graph.add_edge(edge)
+
+    # def RRT(self):
+    #     # TODO: implement RRT in planning class
+    #     # raise NotImplementedError
+    #
+    #     collision_checker = Planning.collisionChecker.emptyCollisionChecker()
+    #
+    #     # RDT(q0):
+    #         # G.init(q0);
+    #         self.graph.add_vertex(self.start)
+    #         # for i = 1 to k do
+    #         for i in range(1000):
+    #
+    #             # qn ← nearest(S, α(i));
+    #             ai = self.getRandomPoint()
+    #
+    #             # if we are in collision
+    #             if (collision_checker(ai) == True):
+    #                 a = 1
+    #                 #discritise the line and find where we are not in collision
+    #             else:
+    #                 # find the closest edge on the graph
+    #                 # find the closest point on the edge sending the step size
+    #                 # split the edge
+    #                 #
+    #
+    #             # qs ← stopping - configuration(qn, α(i));
+    #             # if qs != qn then
+    #                 # G.add vertex(qs);
+    #                 # G.add edge(qn, qs);
+
+    def PRM(self):
+        # TODO: implement PRM in planning class
+        raise NotImplementedError
