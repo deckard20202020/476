@@ -2,8 +2,9 @@ import math
 import numpy as np
 
 from matplotlib import pyplot as plt, patches
+from shapely.geometry import Point, LineString
 
-from HW import geometry, graph, planning
+from HW import geometry, graph, planning, obstacle, edge
 from HW.geometry import Geometry
 from planning import Planning
 from vertex import Vertex
@@ -124,32 +125,52 @@ if __name__ == "__main__":
     # print(f"x: {vertex2.x}, y: {vertex2.y}")
 
     # set up the bounds of the window
-    xmin, xmax, ymin, ymax = -3, 3, -1, 1
+    # xmin, xmax, ymin, ymax = -3, 3, -1, 1
+    #
+    # # set up the circle parameters
+    # circle1_center = [0, 1]
+    # circle2_center = [0, -1]
+    # circle_radius = .5
+    #
+    # # set up the x and y values for the circles
+    # t = np.linspace(0, np.pi, 1000)
+    # x1 = circle1_center[0] + circle_radius * np.cos(t)
+    # y1 = circle1_center[1] + circle_radius * -np.sin(t)
+    # x2 = circle2_center[0] + circle_radius * np.cos(t)
+    # y2 = circle2_center[1] + circle_radius * np.sin(t)
+    #
+    # # create the plot
+    # fig, ax = plt.subplots()
+    # ax.set_xlim([xmin, xmax])
+    # ax.set_ylim([ymin, ymax])
+    #
+    # # plot the circles
+    # ax.plot(x1, y1, color='red')
+    # ax.plot(x2, y2, color='red')
+    #
+    # # show the plot
+    # plt.show()
 
-    # set up the circle parameters
-    circle1_center = [0, 1]
-    circle2_center = [0, -1]
-    circle_radius = .5
+    obstacle = obstacle.CircularObstacle([0, 0], 1)
+    vertex1 = Vertex(-1, -2)
+    vertex2 = Vertex(1, -2)
+    edge = Edge(vertex1, vertex2)
 
-    # set up the x and y values for the circles
-    t = np.linspace(0, np.pi, 1000)
-    x1 = circle1_center[0] + circle_radius * np.cos(t)
-    y1 = circle1_center[1] + circle_radius * -np.sin(t)
-    x2 = circle2_center[0] + circle_radius * np.cos(t)
-    y2 = circle2_center[1] + circle_radius * np.sin(t)
+    # Create a Point object for the center of the circle
+    center = Point(obstacle.center[0], obstacle.center[1])
 
-    # create the plot
-    fig, ax = plt.subplots()
-    ax.set_xlim([xmin, xmax])
-    ax.set_ylim([ymin, ymax])
+    # Create a circle using the buffer method on the Point object
+    circle = center.buffer(obstacle.radius)
 
-    # plot the circles
-    ax.plot(x1, y1, color='red')
-    ax.plot(x2, y2, color='red')
+    # Create a LineString object using the points x1 and y1
+    point1 = Point(edge.vertex1.x, edge.vertex1.y)
+    point2 = Point(edge.vertex2.x, edge.vertex2.y)
+    line = LineString([point1, point2])
 
-    # show the plot
-    plt.show()
-
+    if line.intersects(circle):
+        print("True")
+    else:
+        print("False")
 
 
 

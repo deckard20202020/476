@@ -68,23 +68,22 @@ class Planning:
             def __init__(self, obstacles):
                 self.obstacles = obstacles
 
-            def isInCollision(self, edge, obstacles):
+            def isInCollision(self, edge):
                 # TODO: implement isInCollision in planning class
-                # check if point is within obstacle boundaries
-                # check to see if we have hit any obstacles
-                # find closest point
-                # ...
+
                 # for each of the obstacles-in this case circles
                 for obstacle in self.obstacles:
 
                     # Create a Point object for the center of the circle
-                    center = Point(obstacle.center.x, obstacle.center.y)
+                    center = Point(obstacle.center[0], obstacle.center[1])
 
                     # Create a circle using the buffer method on the Point object
                     circle = center.buffer(obstacle.radius)
 
                     # Create a LineString object using the points x1 and y1
-                    line = LineString([edge.x, edge.y])
+                    point1 = Point(edge.vertex1.x, edge.vertex1.y)
+                    point2 = Point(edge.vertex2.x, edge.vertex2.y)
+                    line = LineString([point1, point2])
 
                     if line.intersects(circle):
                         return False
@@ -178,7 +177,7 @@ class Planning:
         else:
             # make an edge
             edge = Edge(self.start, ai)
-            
+
             # add the edge to the graph
             self.graph.add_edge(edge)
 
@@ -238,7 +237,7 @@ class Planning:
 
         edge = Edge(self.start, ai)
 
-        if (collision_checker.isInCollision(edge, self.obstacles) == True):
+        if (collision_checker.isInCollision(edge) == True):
             closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, obstacle)
         else:
             self.graph.add_edge(edge)
