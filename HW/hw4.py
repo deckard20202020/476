@@ -94,10 +94,16 @@ def printResults(xmin, xmax, ymin, ymax, graph, start, goal, dt):
 
     plt.show()
 
-def main_rrt(xmin, xmax, ymin, ymax, start, goal, stepSize, dt):
+def main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt):
     # TODO: implement main_rrt in hw4
     plan = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    graph = plan.RRTWithoutCollision()
+    graph = plan.RRTExplorationWithoutCollision()
+    return graph
+
+def main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt):
+    # TODO: implement main_rrt in hw4
+    plan = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    graph = plan.RRTExplorationWithCollision()
     return graph
 
 def main_prm():
@@ -116,7 +122,10 @@ if __name__ == "__main__":
     stepSize = .1
     dt = .1
 
-    graph = main_rrt(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
 
-    obstacles = None
-    printResults(xmin, xmax, ymin, ymax, graph, start, goal, dt)
+    # explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
+
+    # just run all three.

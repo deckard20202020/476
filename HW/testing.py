@@ -151,26 +151,44 @@ if __name__ == "__main__":
     # # show the plot
     # plt.show()
 
-    obstacle = obstacle.CircularObstacle([0, 0], 1)
-    vertex1 = Vertex(-1, -2)
-    vertex2 = Vertex(1, -2)
-    edge = Edge(vertex1, vertex2)
+    # obstacle = obstacle.CircularObstacle([0, 0], 1)
+    # vertex1 = Vertex(-1, -2)
+    # vertex2 = Vertex(1, -2)
+    # edge = Edge(vertex1, vertex2)
+    #
+    # # Create a Point object for the center of the circle
+    # center = Point(obstacle.center[0], obstacle.center[1])
+    #
+    # # Create a circle using the buffer method on the Point object
+    # circle = center.buffer(obstacle.radius)
+    #
+    # # Create a LineString object using the points x1 and y1
+    # point1 = Point(edge.vertex1.x, edge.vertex1.y)
+    # point2 = Point(edge.vertex2.x, edge.vertex2.y)
+    # line = LineString([point1, point2])
+    #
+    # if line.intersects(circle):
+    #     print("True")
+    # else:
+    #     print("False")
 
-    # Create a Point object for the center of the circle
-    center = Point(obstacle.center[0], obstacle.center[1])
+    # TODO: Test collisionchecker and closestPoint to obstacle
+    xmin = -3
+    xmax = 3
+    ymin = -1
+    ymax = 1
+    start = Vertex(-3, -1)
+    goal = Vertex(2, -0.5)
+    stepSize = .1
+    dt = .1
 
-    # Create a circle using the buffer method on the Point object
-    circle = center.buffer(obstacle.radius)
+    planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    ai = Vertex(0, -1)
+    collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
+    edge = Edge(start, ai)
+    closestPoint = collisionChecker.findClosestPointToObstacle(edge, planning.obstacles)
+    print(f"x: {closestPoint.x}, y: {closestPoint.y}")
 
-    # Create a LineString object using the points x1 and y1
-    point1 = Point(edge.vertex1.x, edge.vertex1.y)
-    point2 = Point(edge.vertex2.x, edge.vertex2.y)
-    line = LineString([point1, point2])
-
-    if line.intersects(circle):
-        print("True")
-    else:
-        print("False")
 
 
 

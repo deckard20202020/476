@@ -20,7 +20,7 @@ class Planning:
         self.stepSize = stepSize
         self.dt = dt
         self.graph = Graph()
-        circularObstacle1 = CircularObstacle([0, -1], 1- dt)
+        circularObstacle1 = CircularObstacle([0, -1], 1 - dt)
         circularObstacle2 = CircularObstacle([0, 1], 1 - dt)
         self.obstacles = [circularObstacle1, circularObstacle2]
 
@@ -65,8 +65,9 @@ class Planning:
                 return False
 
         class obstacleCollisionChecker:
-            def __init__(self, obstacles):
+            def __init__(self, obstacles, stepSize):
                 self.obstacles = obstacles
+                self.stepSize = stepSize
 
             def isInCollision(self, edge):
                 # TODO: implement isInCollision in planning class
@@ -80,29 +81,48 @@ class Planning:
                     # Create a circle using the buffer method on the Point object
                     circle = center.buffer(obstacle.radius)
 
+                    #Create two points for a LineString object
+                    x1 = edge.vertex1.x
+                    y1 = edge.vertex1.y
+                    x2 = edge.vertex2.y
+                    y2 = edge.vertex2.y
+                    point1 = Point(x1, y1)
+                    point2 = Point(x2, y2)
+
                     # Create a LineString object using the points x1 and y1
-                    point1 = Point(edge.vertex1.x, edge.vertex1.y)
-                    point2 = Point(edge.vertex2.x, edge.vertex2.y)
                     line = LineString([point1, point2])
 
+                    # Use shapely to check to see if our line intersects the circle
                     if line.intersects(circle):
                         return False
 
                 return True
 
-            def findClosestPointToObstacle(self, edge, obstacle):
+            def findClosestPointToObstacle(self, edge, obstacles):
 
                 # get a discritized state of the edge
-                listOfVerticiesAlongEdge = Edge.getDiscritizedState(edge)
+                listOfVerticiesAlongEdge = edge.getDiscritizedState(self.stepSize)
 
-                closestVertex = Vertex()
+                closestVertex = None
+
+                #boolean value to determine if we have hit an obstacle
+                hitsObstacle = False
+
+                # scroll thorugh the discritized edge starting at the first vertex
                 for vertex in listOfVerticiesAlongEdge:
-                    if not obstacle.contains(vertex):
-                        closestVertex = vertex
+                    # we want to check to see if we hit any of the obstacles
+                    for obstacle in obstacles:
+                        if obstacle.contains(vertex):
+                            hitsObstacle = True
+                        # if the vertex hasn't hit any of the obstacles
+                        if hitsObstacle == False:
+                            # updatate our closest vertex
+                            closestVertex = vertex
+                        else:
+                            # otherwise we have hit something so we want to return the last vertex
+                            return closestVertex
 
                 return closestVertex
-
-
 
             def isCheckingRequired(self):
                 # TODO: implement isCheckingRequired in planning class
@@ -162,7 +182,26 @@ class Planning:
         # edd the edge to the graph
         self.graph.add_edge(edge)
 
-    def RRTWithoutCollision(self):
+    def addSplitEdges(self, ai):
+        # find the closest edge on the graph
+        closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+        # find the closest point on the edge
+        closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+        # split the edge
+        splitEdges = closestEdge.split(closestPointOnEdge)
+
+        # add the split edges to the graph
+        for e in splitEdges:
+            self.graph.add_edge(e)
+
+        # TODO: we should replace this with our connect method
+        # add the edge from the split point to the ai
+        newEdge = Edge(closestPointOnEdge, ai)
+        self.graph.add_edge(newEdge)
+
+    def RRTExplorationWithoutCollision(self):
 
         collision_checker = self.collisionChecker.emptyCollisionChecker(self.obstacles)
 
@@ -171,8 +210,10 @@ class Planning:
 
         ai = self.getRandomPoint()
 
-        if collision_checker.isInCollision(ai):
-            # discritise the line and find where we are not in collision
+        edge = Edge(self.start, ai)
+
+        if collision_checker.isInCollision(edge):
+            # we will never enter this
             a = 1
         else:
             # make an edge
@@ -191,9 +232,17 @@ class Planning:
 
             ai = self.getRandomPoint()
 
+            # find the closest edge on the graph
+            closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+            # find the closest point on the edge
+            closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+            edge = Edge(closestPointOnEdge, ai)
+
             # if we are in collision
-            if (collision_checker.isInCollision(ai) == True):
-                #discritise the line and find where we are not in collision
+            if (collision_checker.isInCollision(edge) == True):
+                # we will never enter this
                 a = 1
             else:
                 # find the closest edge on the graph
@@ -213,32 +262,31 @@ class Planning:
                 newEdge = Edge(closestPointOnEdge, ai)
                 self.graph.add_edge(newEdge)
 
-            # Check to see if we have found the goal
+            # # Check to see if we have found the goal
             # if ai == self.goal:
             #     break
 
         return self.graph
 
-    def RRTWithCollision(self):
+    def RRTExplorationWithCollision(self):
         # TODO: implement RRT in planning class
         # raise NotImplementedError
 
-        collision_checker = self.collisionChecker.obstacleCollisionChecker(self.obstacles)
+        collision_checker = self.collisionChecker.obstacleCollisionChecker(self.obstacles, self.stepSize)
 
         # G.init(q0);
         self.graph.add_vertex(self.start)
 
         # the first time around we don't have any edges so we need to add one.
-        randomNumber = self.getRandomNumber(1, 10)
-        if randomNumber == 1:
-            ai = self.goal
-        else:
-            ai = self.getRandomPoint()
+        ai = self.getRandomPoint()
 
         edge = Edge(self.start, ai)
 
+        # check to see if the point we selected creates a line that is in collision
         if (collision_checker.isInCollision(edge) == True):
-            closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, obstacle)
+            closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+            edge = Edge(self.start, closestPointToObstacle)
+            self.graph.add_edge(edge)
         else:
             self.graph.add_edge(edge)
 
@@ -248,22 +296,25 @@ class Planning:
 
 
         # for i = 1 to k do
-        for i in range(100):
+        for i in range(10):
 
-            # qn ← nearest(S, α(i));
-            ai = -1
-            # we should use the goal as ai 10% of the time
-            randomNumber = self.getRandomNumber(1, 10)
-            if randomNumber == 1:
-                ai = self.goal
-            else:
-                ai = self.getRandomPoint()
+            ai = self.getRandomPoint()
+
+            # find the closest edge on the graph
+            closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+            # find the closest point on the edge
+            closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+            edge = Edge(closestPointOnEdge, ai)
 
             # if we are in collision
-            if (collision_checker.isInCollision(ai) == True):
-                #discritise the line and find where we are not in collision
-                a = 1
-            else:
+            if (collision_checker.isInCollision(edge) == True):
+
+                # find the closest point to the obstacle
+                closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+                ai = closestPointToObstacle
+
                 # find the closest edge on the graph
                 closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
 
@@ -281,16 +332,36 @@ class Planning:
                 newEdge = Edge(closestPointOnEdge, ai)
                 self.graph.add_edge(newEdge)
 
-            # Check to see if we have found the goal
-            if ai == self.goal:
-                break
+            else:
+                # # split the edge and add the edges with original ai
+                # self.addSplitEdges(ai)
+
+                # find the closest edge on the graph
+                closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+                # find the closest point on the edge sending the step size
+                closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+                # split the edge
+                splitEdges = closestEdge.split(closestPointOnEdge)
+
+                # add the split edges to the graph
+                for e in splitEdges:
+                    self.graph.add_edge(e)
+
+                # add the edge from the split point to the ai
+                newEdge = Edge(closestPointOnEdge, ai)
+                self.graph.add_edge(newEdge)
+
+            # # Check to see if we have found the goal
+            # if ai == self.goal:
+            #     break
 
         return self.graph
 
-            # qs ← stopping - configuration(qn, α(i));
-            # if qs != qn then
-                # G.add vertex(qs);
-                # G.add edge(qn, qs);
+    def RRTPathfindingWithCollision(self):
+        # TODO: implement RRT in planning class
+        raise NotImplementedError
 
     def PRM(self):
         # TODO: implement PRM in planning class

@@ -45,7 +45,9 @@ class Geometry:
         #
         # distance = Geometry.getEuclideanDistance((x1, y1), (x2, y2))
 
-        distance = Geometry.getEuclideanDistance(center, point)
+        centerAsVertex = Vertex(center[0], center[1])
+
+        distance = Geometry.getEuclideanDistance(centerAsVertex, point)
 
         if distance <= radius:
             return True

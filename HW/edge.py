@@ -22,12 +22,6 @@ class Edge:
         return Edge(self.vertex2, self.vertex1)
 
     def getDiscritizedState(self, stepSize):
-        # takes in a step size
-        # returns a list of steps
-        # this method will not return the last point on the edge
-        # TODO: edit getDiscritizedState to include the last point on the line
-        # That should be ok since I dont think we will use this method
-        # unless we have hit an obstacle
 
         point1 = Point(self.vertex1.x, self.vertex1.y)
         point2 = Point(self.vertex2.x, self.vertex2.y)

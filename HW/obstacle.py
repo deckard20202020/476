@@ -1,4 +1,6 @@
 from HW import geometry
+from HW.geometry import Geometry
+
 
 class Obstacle:
     def contains(self, point):
@@ -16,7 +18,7 @@ class CircularObstacle(Obstacle):
         return self.center, self.radius
 
     def contains(self, point):
-        return geometry.isInsideCircle(self.center, self.radius, point)
+        return Geometry.isInsideCircle(self.center, self.radius, point)
 
         # distance = Geometry.getEuclideanDistance(point, self.center)
         # # distance = ((point[0] - self.center[0]) ** 2 + (point[1] - self.center[1]) ** 2) ** 0.5
