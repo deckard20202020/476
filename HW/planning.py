@@ -282,12 +282,19 @@ class Planning:
 
         edge = Edge(self.start, ai)
 
-        # check to see if the point we selected creates a line that is in collision
+        # if the new point creates a line that is in collision
         if (collision_checker.isInCollision(edge) == True):
+
+            # find the closest point to the obstacle
             closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+
+            # create a new edge
             edge = Edge(self.start, closestPointToObstacle)
+
+            # add the edge to our graph
             self.graph.add_edge(edge)
         else:
+            # otherwise just add the edge to our graph
             self.graph.add_edge(edge)
 
         # Check to see if we have found the goal
@@ -298,6 +305,7 @@ class Planning:
         # for i = 1 to k do
         for i in range(10):
 
+            # find a random point
             ai = self.getRandomPoint()
 
             # find the closest edge on the graph
@@ -306,13 +314,16 @@ class Planning:
             # find the closest point on the edge
             closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
 
+            # make a new edge
             edge = Edge(closestPointOnEdge, ai)
 
-            # if we are in collision
+            # if we are in collision with our new edge
             if (collision_checker.isInCollision(edge) == True):
 
                 # find the closest point to the obstacle
                 closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+
+                #reassign our random point
                 ai = closestPointToObstacle
 
                 # find the closest edge on the graph
@@ -328,13 +339,11 @@ class Planning:
                 for e in splitEdges:
                     self.graph.add_edge(e)
 
-                # add the edge from the split point to the ai
+                # add the edge from the split point to the new ai
                 newEdge = Edge(closestPointOnEdge, ai)
                 self.graph.add_edge(newEdge)
 
-            else:
-                # # split the edge and add the edges with original ai
-                # self.addSplitEdges(ai)
+            else: # we are not in collision with our new edge
 
                 # find the closest edge on the graph
                 closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
