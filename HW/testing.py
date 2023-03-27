@@ -173,6 +173,22 @@ if __name__ == "__main__":
     #     print("False")
 
     # TODO: Test collisionchecker and closestPoint to obstacle
+    # xmin = -3
+    # xmax = 3
+    # ymin = -1
+    # ymax = 1
+    # start = Vertex(-3, -1)
+    # goal = Vertex(2, -0.5)
+    # stepSize = .1
+    # dt = .1
+    #
+    # planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # ai = Vertex(0, -1)
+    # collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
+    # edge = Edge(start, ai)
+    # closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
+    # print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+
     xmin = -3
     xmax = 3
     ymin = -1
@@ -183,11 +199,15 @@ if __name__ == "__main__":
     dt = .1
 
     planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    ai = Vertex(0, -1)
+    vertex1 = Vertex(-1.1, -0.5)
+    vertex2 = Vertex(-1.1, -0.8)
+    edge = Edge(vertex1, vertex2)
     collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
-    edge = Edge(start, ai)
-    closestPoint = collisionChecker.findClosestPointToObstacle(edge, planning.obstacles)
-    print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+    areWeInCollision = collisionChecker.isInCollision(edge)
+    print(areWeInCollision)
+    # print()
+    # closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
+    # print(f"x: {closestPoint.x}, y: {closestPoint.y}")
 
 
 

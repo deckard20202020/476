@@ -84,7 +84,7 @@ class Planning:
                     #Create two points for a LineString object
                     x1 = edge.vertex1.x
                     y1 = edge.vertex1.y
-                    x2 = edge.vertex2.y
+                    x2 = edge.vertex2.x
                     y2 = edge.vertex2.y
                     point1 = Point(x1, y1)
                     point2 = Point(x2, y2)
@@ -94,16 +94,16 @@ class Planning:
 
                     # Use shapely to check to see if our line intersects the circle
                     if line.intersects(circle):
-                        return False
+                        return True
 
-                return True
+                return False
 
-            def findClosestPointToObstacle(self, edge, obstacles):
+            def findClosestVertexToObstacle(self, edge, obstacles):
 
                 # get a discritized state of the edge
                 listOfVerticiesAlongEdge = edge.getDiscritizedState(self.stepSize)
 
-                closestVertex = None
+                closestVertex = edge.vertex1
 
                 #boolean value to determine if we have hit an obstacle
                 hitsObstacle = False
@@ -122,7 +122,7 @@ class Planning:
                             # otherwise we have hit something so we want to return the last vertex
                             return closestVertex
 
-                return closestVertex
+                # return closestVertex
 
             def isCheckingRequired(self):
                 # TODO: implement isCheckingRequired in planning class
@@ -286,7 +286,7 @@ class Planning:
         if (collision_checker.isInCollision(edge) == True):
 
             # find the closest point to the obstacle
-            closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+            closestPointToObstacle = collision_checker.findClosestVertexToObstacle(edge, self.obstacles)
 
             # create a new edge
             edge = Edge(self.start, closestPointToObstacle)
@@ -303,7 +303,7 @@ class Planning:
 
 
         # for i = 1 to k do
-        for i in range(10):
+        for i in range(100):
 
             # find a random point
             ai = self.getRandomPoint()
@@ -321,7 +321,7 @@ class Planning:
             if (collision_checker.isInCollision(edge) == True):
 
                 # find the closest point to the obstacle
-                closestPointToObstacle = collision_checker.findClosestPointToObstacle(edge, self.obstacles)
+                closestPointToObstacle = collision_checker.findClosestVertexToObstacle(edge, self.obstacles)
 
                 #reassign our random point
                 ai = closestPointToObstacle

@@ -23,14 +23,14 @@ class Geometry:
         return closestVertex
 
     @staticmethod
-    def getEuclideanDistance(point1, point2):
+    def getEuclideanDistance(vertex1, vertex2):
         # x1, y1 = point1
         # x2, y2 = point2
 
-        x1 = point1.x
-        y1 = point1.y
-        x2 = point2.x
-        y2 = point2.y
+        x1 = vertex1.x
+        y1 = vertex1.y
+        x2 = vertex2.x
+        y2 = vertex2.y
 
         dx = x2 - x1
         dy = y2 - y1
@@ -38,7 +38,7 @@ class Geometry:
         return math.sqrt(dx * dx + dy * dy)
 
     @staticmethod
-    def isInsideCircle(center, radius, point):
+    def isInsideCircle(center, radius, vertex):
 
         # x1, y1 = center
         # x2, y2 = point
@@ -47,7 +47,7 @@ class Geometry:
 
         centerAsVertex = Vertex(center[0], center[1])
 
-        distance = Geometry.getEuclideanDistance(centerAsVertex, point)
+        distance = Geometry.getEuclideanDistance(centerAsVertex, vertex)
 
         if distance <= radius:
             return True
@@ -55,7 +55,7 @@ class Geometry:
             return False
 
     @staticmethod
-    def findClosestEdgeOnGraph(graph, point, stepSize):
+    def findClosestEdgeOnGraph(graph, vertex, stepSize):
         # TODO: implement findClosestEdgeOnGraph
         shortestDistance = float('inf')
         closestEdge = None
@@ -66,8 +66,8 @@ class Geometry:
 
 
             for segment in segments:
-                segmentPoint = Vertex(segment.x, segment.y)
-                distance = Geometry.getEuclideanDistance(point, segmentPoint)
+                segmentVertex = Vertex(segment.x, segment.y)
+                distance = Geometry.getEuclideanDistance(vertex, segmentVertex)
                 if (distance < shortestDistance):
                     shortestDistance = distance
                     closestEdge = edge

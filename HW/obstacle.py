@@ -17,8 +17,8 @@ class CircularObstacle(Obstacle):
         # what do I need this for???
         return self.center, self.radius
 
-    def contains(self, point):
-        return Geometry.isInsideCircle(self.center, self.radius, point)
+    def contains(self, vertex):
+        return Geometry.isInsideCircle(self.center, self.radius, vertex)
 
         # distance = Geometry.getEuclideanDistance(point, self.center)
         # # distance = ((point[0] - self.center[0]) ** 2 + (point[1] - self.center[1]) ** 2) ** 0.5

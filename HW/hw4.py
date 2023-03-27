@@ -122,10 +122,10 @@ if __name__ == "__main__":
     stepSize = .1
     dt = .1
 
-    explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
+    # explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
 
-    # explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    # printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
+    explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
 
     # just run all three.
