@@ -24,8 +24,6 @@ class Geometry:
 
     @staticmethod
     def getEuclideanDistance(vertex1, vertex2):
-        # x1, y1 = point1
-        # x2, y2 = point2
 
         x1 = vertex1.x
         y1 = vertex1.y
@@ -35,21 +33,19 @@ class Geometry:
         dx = x2 - x1
         dy = y2 - y1
 
-        return math.sqrt(dx * dx + dy * dy)
+        return math.sqrt((dx * dx) + (dy * dy))
 
     @staticmethod
     def isInsideCircle(center, radius, vertex):
 
-        # x1, y1 = center
-        # x2, y2 = point
-        #
-        # distance = Geometry.getEuclideanDistance((x1, y1), (x2, y2))
-
+        # translate the center to a vertex
         centerAsVertex = Vertex(center[0], center[1])
 
+        # get the distance between the center and the vertex
         distance = Geometry.getEuclideanDistance(centerAsVertex, vertex)
 
-        if distance <= radius:
+        # if the distance is less than the radius we are inside the circle
+        if distance - .1 <= radius:
             return True
         else:
             return False

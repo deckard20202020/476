@@ -113,16 +113,19 @@ class Planning:
                     # we want to check to see if we hit any of the obstacles
                     for obstacle in obstacles:
                         if obstacle.contains(vertex):
-                            hitsObstacle = True
-                        # if the vertex hasn't hit any of the obstacles
-                        if hitsObstacle == False:
-                            # updatate our closest vertex
-                            closestVertex = vertex
-                        else:
-                            # otherwise we have hit something so we want to return the last vertex
                             return closestVertex
+                        else:
+                            closestVertex = vertex
+                        #     hitsObstacle = True
+                        # # if the vertex hasn't hit any of the obstacles
+                        # if hitsObstacle == False:
+                        #     # updatate our closest vertex
+                        #     closestVertex = vertex
+                        # else:
+                        #     # otherwise we have hit something so we want to return the last vertex
+                        #     return closestVertex
 
-                # return closestVertex
+                return closestVertex
 
             def isCheckingRequired(self):
                 # TODO: implement isCheckingRequired in planning class

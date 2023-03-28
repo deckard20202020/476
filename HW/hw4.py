@@ -126,6 +126,18 @@ if __name__ == "__main__":
     # printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
 
     explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    print()
+    planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
+    for edge in explorationGraphWithCollision.get_edges():
+        if collisionChecker.isInCollision(edge):
+            print(edge.vertex1.x)
+            print(edge.vertex1.y)
+            print(edge.vertex2.x)
+            print(edge.vertex2.y)
+            print()
+
+    print()
     printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
 
     # just run all three.
