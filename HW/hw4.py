@@ -204,11 +204,11 @@ if __name__ == "__main__":
 
     # explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
     # printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
-    #
-    # explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    # printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
 
-    pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
+    explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
+
+    # pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
 
     # just run all three.

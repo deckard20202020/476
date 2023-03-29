@@ -39,6 +39,7 @@ class Planning:
                 pass
 
             def makeEdge(self, start, end, graph):
+                # I don't think I ever use this
                 edge = Edge(start, end)
                 graph.add_edge(edge)
 
@@ -197,12 +198,29 @@ class Planning:
 
         # add the split edges to the graph
         for e in splitEdges:
-            self.graph.add_edge(e)
+            self.connect(e.vertex1, e.vertex2)
 
-        # TODO: we should replace this with our connect method
         # add the edge from the split point to the ai
         newEdge = Edge(closestPointOnEdge, ai)
-        self.graph.add_edge(newEdge)
+        self.connect(newEdge.vertex1, newEdge.vertex2)
+
+    def findClosestEdgeAndSplit(self, ai):
+        # find the closest edge on the graph
+        closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+        # find the closest point on the edge sending the step size
+        closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+        # split the edge
+        splitEdges = closestEdge.split(closestPointOnEdge)
+
+        # add the split edges to the graph
+        for e in splitEdges:
+            self.connect(e.vertex1, e.vertex2)
+
+        # add the edge from the split point to the new ai
+        newEdge = Edge(closestPointOnEdge, ai)
+        self.connect(newEdge.vertex1, newEdge.vertex2)
 
     def RRTExplorationWithoutCollision(self):
 
@@ -223,7 +241,7 @@ class Planning:
             edge = Edge(self.start, ai)
 
             # add the edge to the graph
-            self.graph.add_edge(edge)
+            self.connect(edge.vertex1, edge.vertex2)
 
         # Check to see if we have found the goal
         # if ai == self.goal:
@@ -259,11 +277,11 @@ class Planning:
 
                 # add the split edges to the graph
                 for e in splitEdges:
-                    self.graph.add_edge(e)
+                    self.connect(e.vertex1, e.vertex2)
 
                 # add the edge from the split point to the ai
                 newEdge = Edge(closestPointOnEdge, ai)
-                self.graph.add_edge(newEdge)
+                self.connect(newEdge.vertex1, newEdge.vertex2)
 
             # # Check to see if we have found the goal
             # if ai == self.goal:
@@ -293,10 +311,10 @@ class Planning:
             edge = Edge(self.start, closestPointToObstacle)
 
             # add the edge to our graph
-            self.graph.add_edge(edge)
+            self.connect(edge.vertex1, edge.vertex2)
         else:
             # otherwise just add the edge to our graph
-            self.graph.add_edge(edge)
+            self.connect(edge.vertex1, edge.vertex2)
 
         # Check to see if we have found the goal
         # if ai == self.goal:
@@ -338,11 +356,11 @@ class Planning:
 
                 # add the split edges to the graph
                 for e in splitEdges:
-                    self.graph.add_edge(e)
+                    self.connect(e.vertex1, e.vertex2)
 
                 # add the edge from the split point to the new ai
                 newEdge = Edge(closestPointOnEdge, ai)
-                self.graph.add_edge(newEdge)
+                self.connect(newEdge.vertex1, newEdge.vertex2)
 
             else: # we are not in collision with our new edge
 
@@ -357,11 +375,11 @@ class Planning:
 
                 # add the split edges to the graph
                 for e in splitEdges:
-                    self.graph.add_edge(e)
+                    self.connect(e.vertex1, e.vertex2)
 
                 # add the edge from the split point to the ai
                 newEdge = Edge(closestPointOnEdge, ai)
-                self.graph.add_edge(newEdge)
+                self.connect(newEdge.vertex1, newEdge.vertex2)
 
             # # Check to see if we have found the goal
             # if ai == self.goal:
@@ -392,11 +410,9 @@ class Planning:
             edge = Edge(self.start, closestPointToObstacle)
 
             # add the edge to our graph
-            # self.graph.add_edge(edge)
             self.connect(edge.vertex1, edge.vertex2)
         else:
             # otherwise just add the edge to our graph
-            # self.graph.add_edge(edge)
             self.connect(edge.vertex1, edge.vertex2)
 
         # Check to see if we have found the goal
@@ -428,6 +444,8 @@ class Planning:
                 #reassign our random point
                 ai = closestPointToObstacle
 
+                # self.findClosestEdgeAndSplit(ai)
+
                 # find the closest edge on the graph
                 closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
 
@@ -439,12 +457,10 @@ class Planning:
 
                 # add the split edges to the graph
                 for e in splitEdges:
-                    # self.graph.add_edge(e)
                     self.connect(e.vertex1, e.vertex2)
 
                 # add the edge from the split point to the new ai
                 newEdge = Edge(closestPointOnEdge, ai)
-                # self.graph.add_edge(newEdge)
                 self.connect(newEdge.vertex1, newEdge.vertex2)
 
             else: # we are not in collision with our new edge
@@ -460,12 +476,10 @@ class Planning:
 
                 # add the split edges to the graph
                 for e in splitEdges:
-                    # self.graph.add_edge(e)
                     self.connect(e.vertex1, e.vertex2)
 
                 # add the edge from the split point to the ai
                 newEdge = Edge(closestPointOnEdge, ai)
-                # self.graph.add_edge(newEdge)
                 self.connect(newEdge.vertex1, newEdge.vertex2)
 
             # Check to see if we have found the goal
