@@ -33,7 +33,7 @@ class Graph:
         return self.adj_list[vertex]
 
     def getDistanceBetweenVertices(self, vertex1, vertex2):
-        return Geometry.getEuclideanDistance((vertex1.x, vertex1.y), (vertex2.x, vertex2.y))
+        return Geometry.getEuclideanDistance((vertex1._x, vertex1._y), (vertex2._x, vertex2._y))
 
     def get_edges(self):
         edges = []

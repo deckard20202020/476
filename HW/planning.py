@@ -82,10 +82,10 @@ class Planning:
                     circle = center.buffer(obstacle.radius)
 
                     #Create two points for a LineString object
-                    x1 = edge.vertex1.x
-                    y1 = edge.vertex1.y
-                    x2 = edge.vertex2.x
-                    y2 = edge.vertex2.y
+                    x1 = edge.vertex1._x
+                    y1 = edge.vertex1._y
+                    x2 = edge.vertex2._x
+                    y2 = edge.vertex2._y
                     point1 = Point(x1, y1)
                     point2 = Point(x2, y2)
 
@@ -122,6 +122,8 @@ class Planning:
                         # update our closest vertex and keep going
                         closestVertex = vertex
                     else:
+                        # update the parent of the closest Vertes
+                        closestVertex._parent = edge.vertex1
                         # otherwise stop and return our closest vertex so far
                         return closestVertex
 
@@ -175,7 +177,7 @@ class Planning:
         # connects two points after we find them with RRT or PRM
 
         # make a vertex3 using the points of vertex2 and assigning its parent as vertex 1
-        vertex2WithParent = Vertex(vertex2.x, vertex2.y, vertex1)
+        vertex2WithParent = Vertex(vertex2._x, vertex2._y, vertex1)
 
         # make an edge with vertex1 and our new vertex
         edge = Edge(vertex1, vertex2WithParent)
@@ -270,8 +272,6 @@ class Planning:
         return self.graph
 
     def RRTExplorationWithCollision(self):
-        # TODO: implement RRT in planning class
-        # raise NotImplementedError
 
         collision_checker = self.collisionChecker.obstacleCollisionChecker(self.obstacles, self.stepSize)
 
@@ -371,7 +371,108 @@ class Planning:
 
     def RRTPathfindingWithCollision(self):
         # TODO: implement RRT in planning class
-        raise NotImplementedError
+
+        collision_checker = self.collisionChecker.obstacleCollisionChecker(self.obstacles, self.stepSize)
+
+        # G.init(q0);
+        self.graph.add_vertex(self.start)
+
+        # the first time around we don't have any edges so we need to add one.
+        ai = self.getRandomPoint()
+
+        edge = Edge(self.start, ai)
+
+        # if the new point creates a line that is in collision
+        if (collision_checker.isInCollision(edge) == True):
+
+            # find the closest point to the obstacle
+            closestPointToObstacle = collision_checker.findClosestVertexToObstacle(edge, self.obstacles)
+
+            # create a new edge
+            edge = Edge(self.start, closestPointToObstacle)
+
+            # add the edge to our graph
+            # self.graph.add_edge(edge)
+            self.connect(edge.vertex1, edge.vertex2)
+        else:
+            # otherwise just add the edge to our graph
+            # self.graph.add_edge(edge)
+            self.connect(edge.vertex1, edge.vertex2)
+
+        # Check to see if we have found the goal
+        if ai == self.goal:
+            return self.graph
+
+
+        # for i = 1 to k do
+        for i in range(100):
+
+            # find a random point
+            ai = self.getRandomPoint()
+
+            # find the closest edge on the graph
+            closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+            # find the closest point on the edge
+            closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+            # make a new edge
+            edge = Edge(closestPointOnEdge, ai)
+
+            # if we are in collision with our new edge
+            if (collision_checker.isInCollision(edge) == True):
+
+                # find the closest point to the obstacle
+                closestPointToObstacle = collision_checker.findClosestVertexToObstacle(edge, self.obstacles)
+
+                #reassign our random point
+                ai = closestPointToObstacle
+
+                # find the closest edge on the graph
+                closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+                # find the closest point on the edge sending the step size
+                closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+                # split the edge
+                splitEdges = closestEdge.split(closestPointOnEdge)
+
+                # add the split edges to the graph
+                for e in splitEdges:
+                    # self.graph.add_edge(e)
+                    self.connect(e.vertex1, e.vertex2)
+
+                # add the edge from the split point to the new ai
+                newEdge = Edge(closestPointOnEdge, ai)
+                # self.graph.add_edge(newEdge)
+                self.connect(newEdge.vertex1, newEdge.vertex2)
+
+            else: # we are not in collision with our new edge
+
+                # find the closest edge on the graph
+                closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
+
+                # find the closest point on the edge sending the step size
+                closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+
+                # split the edge
+                splitEdges = closestEdge.split(closestPointOnEdge)
+
+                # add the split edges to the graph
+                for e in splitEdges:
+                    # self.graph.add_edge(e)
+                    self.connect(e.vertex1, e.vertex2)
+
+                # add the edge from the split point to the ai
+                newEdge = Edge(closestPointOnEdge, ai)
+                # self.graph.add_edge(newEdge)
+                self.connect(newEdge.vertex1, newEdge.vertex2)
+
+            # Check to see if we have found the goal
+            if ai == self.goal:
+                break
+
+        return self.graph
 
     def PRM(self):
         # TODO: implement PRM in planning class

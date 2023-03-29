@@ -23,8 +23,8 @@ class Edge:
 
     def getDiscritizedState(self, stepSize):
 
-        point1 = Point(self.vertex1.x, self.vertex1.y)
-        point2 = Point(self.vertex2.x, self.vertex2.y)
+        point1 = Point(self.vertex1._x, self.vertex1._y)
+        point2 = Point(self.vertex2._x, self.vertex2._y)
         line = LineString([point1, point2])
         length = line.length
         num_segments = int(length / stepSize) + 1
@@ -72,6 +72,8 @@ class Edge:
 
 
     def split(self, point):
+
+        # TODO: is my parent problem here???
 
         # make two new edges
         firstEdge = Edge(self.vertex1, point)

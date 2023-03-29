@@ -232,7 +232,7 @@ if __name__ == "__main__":
 
     closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
     print("this is the closest point, should be to the left of (-0.9, 1)")
-    print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+    print(f"x: {closestPoint._x}, y: {closestPoint._y}")
     print()
 
 

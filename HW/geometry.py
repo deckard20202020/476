@@ -10,25 +10,25 @@ class Geometry:
 
     @staticmethod
     def getNearestVertexOnLine(vertex1, vertex2, point):
-        p1 = Point(vertex1.x, vertex1.y)
-        p2 = Point(vertex2.x, vertex2.y)
-        p3 = Point(point.x, point.y)
+        p1 = Point(vertex1._x, vertex1._y)
+        p2 = Point(vertex2._x, vertex2._y)
+        p3 = Point(point._x, point._y)
 
         line = LineString([p1, p2])
         closestPoint = line.interpolate(line.project(p3))
 
-        #convert to a vertex
-        closestVertex = Vertex(closestPoint.x, closestPoint.y)
+        #convert to a vertex with parent
+        closestVertex = Vertex(closestPoint.x, closestPoint.y, vertex1)
 
         return closestVertex
 
     @staticmethod
     def getEuclideanDistance(vertex1, vertex2):
 
-        x1 = vertex1.x
-        y1 = vertex1.y
-        x2 = vertex2.x
-        y2 = vertex2.y
+        x1 = vertex1._x
+        y1 = vertex1._y
+        x2 = vertex2._x
+        y2 = vertex2._y
 
         dx = x2 - x1
         dy = y2 - y1
@@ -63,7 +63,7 @@ class Geometry:
 
 
             for segment in segments:
-                segmentVertex = Vertex(segment.x, segment.y)
+                segmentVertex = Vertex(segment._x, segment._y)
                 distance = Geometry.getEuclideanDistance(vertex, segmentVertex)
                 if (distance < shortestDistance):
                     shortestDistance = distance

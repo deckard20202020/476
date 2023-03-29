@@ -1,26 +1,26 @@
 class Vertex:
 
     def __init__(self, x, y, parent = None):
-        self.x = x
-        self.y = y
-        self.parent = parent
+        self._x = x
+        self._y = y
+        self._parent = parent
 
     def __eq__(self, other):
         if isinstance(other, Vertex):
-            return self.x == other.x and self.y == other.y
+            return self._x == other._x and self._y == other._y
         return False
 
     def __hash__(self):
-        return hash((self.x, self.y))
+        return hash((self._x, self._y))
 
     def getX(self, vertex):
-        return vertex.x
+        return vertex._x
 
     def getY(self, vertex):
-        return vertex.y
+        return vertex._y
 
     def getParent(self, vertex):
-        return vertex.parent
+        return vertex._parent
 
     def setParent(self, vertex, parent):
-        vertex.parent = parent
+        vertex._parent = parent
