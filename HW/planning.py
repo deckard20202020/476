@@ -103,9 +103,8 @@ class Planning:
                 # get a discritized state of the edge
                 listOfVerticiesAlongEdge = edge.getDiscritizedState(self.stepSize)
 
+                # initialize our closest vertex
                 closestVertex = edge.vertex1
-
-                setOfBooleansCheckingIfVertexIsInEachObstacle = set()
 
                 #boolean value to determine if we have hit an obstacle
                 hitsObstacle = False
@@ -114,26 +113,17 @@ class Planning:
                 for vertex in listOfVerticiesAlongEdge:
                     # we want to check to see if we hit any of the obstacles
                     for obstacle in obstacles:
-                        # this needs to be an or statement checking both obstacles
+                        # if at any time we hit an obstacle
                         if obstacle.contains(vertex):
-                            setOfBooleansCheckingIfVertexIsInEachObstacle.add(True)
-                        # if obstacle.contains(vertex):
-                        #     return closestVertex
-                        # else:
-                        #     closestVertex = vertex
-                    if len(setOfBooleansCheckingIfVertexIsInEachObstacle) == 0:
+                            # update our boolean value
+                            hitsObstacle = True
+                    # if we have not hit an obstacle yet
+                    if hitsObstacle == False:
+                        # update our closest vertex and keep going
                         closestVertex = vertex
-
                     else:
+                        # otherwise stop and return our closest vertex so far
                         return closestVertex
-                        #     hitsObstacle = True
-                        # # if the vertex hasn't hit any of the obstacles
-                        # if hitsObstacle == False:
-                        #     # updatate our closest vertex
-                        #     closestVertex = vertex
-                        # else:
-                        #     # otherwise we have hit something so we want to return the last vertex
-                        #     return closestVertex
 
                 return closestVertex
 
@@ -147,9 +137,7 @@ class Planning:
 
 
     def getRandomPoint(self):
-        # TODO: Do I need to gt random points based on the random method in class???
-        # this implementation will give a precision of x.x
-
+        # get a random number between 1 and 10 inclusive
         randomNumber = self.getRandomNumber(1, 10)
 
         # this will allow us to check the goal 10% of the time
