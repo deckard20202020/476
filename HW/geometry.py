@@ -45,7 +45,6 @@ class Geometry:
         distance = Geometry.getEuclideanDistance(centerAsVertex, vertex)
 
         # if the distance is less than the radius we are inside the circle
-        # TODO: This will work if you subtract .1
         if distance <= radius:
             return True
         else:
@@ -53,7 +52,6 @@ class Geometry:
 
     @staticmethod
     def findClosestEdgeOnGraph(graph, vertex, stepSize):
-        # TODO: implement findClosestEdgeOnGraph
         shortestDistance = float('inf')
         closestEdge = None
 
