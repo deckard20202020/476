@@ -45,7 +45,8 @@ class Geometry:
         distance = Geometry.getEuclideanDistance(centerAsVertex, vertex)
 
         # if the distance is less than the radius we are inside the circle
-        if distance - .1 <= radius:
+        # TODO: This will work if you subtract .1
+        if distance <= radius:
             return True
         else:
             return False

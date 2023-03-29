@@ -105,6 +105,8 @@ class Planning:
 
                 closestVertex = edge.vertex1
 
+                setOfBooleansCheckingIfVertexIsInEachObstacle = set()
+
                 #boolean value to determine if we have hit an obstacle
                 hitsObstacle = False
 
@@ -112,10 +114,18 @@ class Planning:
                 for vertex in listOfVerticiesAlongEdge:
                     # we want to check to see if we hit any of the obstacles
                     for obstacle in obstacles:
+                        # this needs to be an or statement checking both obstacles
                         if obstacle.contains(vertex):
-                            return closestVertex
-                        else:
-                            closestVertex = vertex
+                            setOfBooleansCheckingIfVertexIsInEachObstacle.add(True)
+                        # if obstacle.contains(vertex):
+                        #     return closestVertex
+                        # else:
+                        #     closestVertex = vertex
+                    if len(setOfBooleansCheckingIfVertexIsInEachObstacle) == 0:
+                        closestVertex = vertex
+
+                    else:
+                        return closestVertex
                         #     hitsObstacle = True
                         # # if the vertex hasn't hit any of the obstacles
                         # if hitsObstacle == False:

@@ -189,6 +189,27 @@ if __name__ == "__main__":
     # closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
     # print(f"x: {closestPoint.x}, y: {closestPoint.y}")
 
+    # xmin = -3
+    # xmax = 3
+    # ymin = -1
+    # ymax = 1
+    # start = Vertex(-3, -1)
+    # goal = Vertex(2, -0.5)
+    # stepSize = .1
+    # dt = .1
+
+    # planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # vertex1 = Vertex(-1.1, -0.5)
+    # vertex2 = Vertex(-1.1, -0.8)
+    # edge = Edge(vertex1, vertex2)
+    # collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
+    # areWeInCollision = collisionChecker.isInCollision(edge)
+    # print(areWeInCollision)
+    # print()
+    # closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
+    # print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+
+    # TODO: testing upper circle
     xmin = -3
     xmax = 3
     ymin = -1
@@ -199,15 +220,20 @@ if __name__ == "__main__":
     dt = .1
 
     planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    vertex1 = Vertex(-1.1, -0.5)
-    vertex2 = Vertex(-1.1, -0.8)
+    vertex1 = Vertex(-1.1, 1)
+    vertex2 = Vertex(-.5, 1)
     edge = Edge(vertex1, vertex2)
     collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
+
     areWeInCollision = collisionChecker.isInCollision(edge)
+    print("Are we in collision, should be true")
     print(areWeInCollision)
-    # print()
-    # closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
-    # print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+    print()
+
+    closestPoint = collisionChecker.findClosestVertexToObstacle(edge, planning.obstacles)
+    print("this is the closest point, should be to the left of (-0.9, 1)")
+    print(f"x: {closestPoint.x}, y: {closestPoint.y}")
+    print()
 
 
 
