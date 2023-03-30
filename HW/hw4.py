@@ -154,20 +154,24 @@ def printResultsWithPath(xmin, xmax, ymin, ymax, graph, start, goal, dt):
             goalVertex = v
             break
 
-    while goalVertex._parent is not None:
-        #make the goalVertex blue
-        x1 = goalVertex._x
-        y1 = goalVertex._y
-        ax.plot(x1, y1, 'bo')
+    if goalVertex == None or goalVertex._parent == None:
+        # pause here
+        a = 1
+    else:
+        while goalVertex._parent is not None:
+            #make the goalVertex a blue circle
+            x1 = goalVertex._x
+            y1 = goalVertex._y
+            ax.plot(x1, y1, 'bo')
 
-        # plot the edge in blue
-        edge = Edge(goalVertex, goalVertex._parent)
-        first = [edge.vertex1._x, edge.vertex2._x]
-        second = [edge.vertex1._y, edge.vertex2._y]
-        ax.plot(first, second, color='b')
+            # plot the edge in blue
+            edge = Edge(goalVertex, goalVertex._parent)
+            first = [edge.vertex1._x, edge.vertex2._x]
+            second = [edge.vertex1._y, edge.vertex2._y]
+            ax.plot(first, second, color='b')
 
-        # reassign the goalVertex
-        goalVertex = goalVertex._parent
+            # reassign the goalVertex
+            goalVertex = goalVertex._parent
 
     plt.show()
 
@@ -205,10 +209,11 @@ if __name__ == "__main__":
     # explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
     # printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
 
-    explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
+    # explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    # printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
 
-    # pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    # printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
+    for i in range(30):
+        pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+        printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
 
     # just run all three.

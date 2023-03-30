@@ -71,13 +71,22 @@ class Edge:
         return closest_point
 
 
-    def split(self, point):
+    def split(self, midVertex):
 
         # TODO: is my parent problem here???
+        # vertex1 should already have a parent
+
+        # make the parent of the midpoint the first vertex
+        midVertex = Vertex(midVertex._x, midVertex._y, self.vertex1)
+
+        # make the parent of vertex2 the midpoint
+        rightVertex = Vertex(self.vertex1, self.vertex2, midVertex)
 
         # make two new edges
-        firstEdge = Edge(self.vertex1, point)
-        secondEdge = Edge(point, self.vertex2)
+        # firstEdge = Edge(self.vertex1, midVertex)
+        # secondEdge = Edge(midVertex, self.vertex2)
+        firstEdge = Edge(self.vertex1, midVertex)
+        secondEdge = Edge(midVertex, self.vertex2)
 
         # TODO: when you use split in algorigthm
         # add those two edges to the graph

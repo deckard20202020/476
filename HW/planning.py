@@ -312,6 +312,10 @@ class Planning:
 
             # add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
+
+            #reassign ai
+            ai = closestPointToObstacle
+            
         else:
             # otherwise just add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
@@ -411,6 +415,10 @@ class Planning:
 
             # add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
+
+            #reassign ai
+            ai = closestPointToObstacle
+
         else:
             # otherwise just add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
@@ -485,6 +493,12 @@ class Planning:
             # Check to see if we have found the goal
             if ai == self.goal:
                 break
+
+        numberOfEdges = len(self.graph.get_edges())
+        numberOfVertices = len(self.graph.get_vertices())
+        if numberOfEdges <= 3 or numberOfVertices <= 4:
+            #pause here
+            a = 1
 
         return self.graph
 
