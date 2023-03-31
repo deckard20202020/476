@@ -73,9 +73,6 @@ class Edge:
 
     def split(self, midVertex):
 
-        # TODO: is my parent problem here???
-        # I think this is fixed
-
         # vertex1 should already have a parent
 
         # make the parent of the midpoint the first vertex

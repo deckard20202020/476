@@ -48,10 +48,8 @@ class Planning:
             pass
 
         def euclideanDistanceComputator(self, vertex1, vertex2):
-            # TODO: implement euclideanDistanceComputator in planning class
-            # what will I use this for???
+            # I don't think I ever use this
             return Geometry.getEuclideanDistance(vertex1, vertex2)
-            # return ((vertex1[0] - vertex2[0]) ** 2 + (vertex1[1] - vertex2[1]) ** 2) ** 0.5
 
     class collisionChecker:
         def __init__(self):
@@ -71,7 +69,6 @@ class Planning:
                 self.stepSize = stepSize
 
             def isInCollision(self, edge):
-                # TODO: implement isInCollision in planning class
 
                 # for each of the obstacles-in this case circles
                 for obstacle in self.obstacles:
@@ -123,12 +120,8 @@ class Planning:
                         # update our closest vertex and keep going
                         closestVertex = vertex
                     else:
-                        # TODO: parents
-                        # I think this is fixed
                         # otherwise stop and return our closest vertex so far
-                        # update the parent of the closest Vertex
                         closestVertex._parent = edge.vertex1
-                        # closestVertex.setParent(edge.vertex1)
                         return closestVertex
 
                 return closestVertex
@@ -180,8 +173,6 @@ class Planning:
     def connect(self, vertex1, vertex2):
         # connects two points after we find them with RRT or PRM
 
-        # TODO: parents
-        # I think this is done
         # make a vertex3 using the points of vertex2 and assigning its parent as vertex 1
         vertex2WithParent = Vertex(vertex2._x, vertex2._y, vertex1)
 
@@ -394,7 +385,6 @@ class Planning:
         return self.graph
 
     def RRTPathfindingWithCollision(self):
-        # TODO: implement RRT in planning class
 
         collision_checker = self.collisionChecker.obstacleCollisionChecker(self.obstacles, self.stepSize)
 
@@ -474,13 +464,6 @@ class Planning:
                 self.connect(newEdge.vertex1, newEdge.vertex2)
 
             else: # we are not in collision with our new edge
-
-                # # add this point to our graph
-                # self.graph.add_vertex(closestPointOnEdge)
-                #
-                # # add ai to the graph with it's parent
-                # ai = Vertex(ai._x, ai._y, closestPointOnEdge)
-                # self.graph.add_vertex(ai)
 
                 # split the edge
                 splitEdges = closestEdge.split(closestPointOnEdge)
