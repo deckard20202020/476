@@ -20,4 +20,8 @@ There is also the change that a random point can be chosen more than once.
 Currently, random points are chosen with a precision of one decimal place.  For example (2.5, 1.2).
 If you would like to increase the precision this can be done by altering the getRandomPoint() method in planning.py
 
+For path finding, when I split eges, I keep the super edge in my graph.
+This means it might appear that certain points along the path are skipped.
+This should not be a concern as the path is still valid.  
+
 Let me know if you have any issues or questions.
