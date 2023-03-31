@@ -8,18 +8,20 @@ class Graph:
 
     def add_vertex(self, vertex):
         if vertex not in self.vertices:
+            vertex.connectedComponent = self
             self.vertices[vertex] = True
             self.adj_list[vertex] = []
 
-    def add_edge(self, edge):
+    def add_edge(self, edge, addReverseEdge = False):
         self.add_vertex(edge.vertex1)
         self.add_vertex(edge.vertex2)
         if edge.vertex2 not in self.adj_list[edge.vertex1]:
             self.adj_list[edge.vertex1].append(edge.vertex2)
 
         # DO NOT ADD THE REVERSE EDGE FOR THIS APPLICATION!!!!
-        # if edge.vertex1 not in self.adj_list[edge.vertex2]:
-        #     self.adj_list[edge.vertex2].append(edge.vertex1)
+        if addReverseEdge == True:
+            if edge.vertex1 not in self.adj_list[edge.vertex2]:
+                self.adj_list[edge.vertex2].append(edge.vertex1)
 
     def get_adjacent_vertices(self, vertex):
         return self.adj_list[vertex]
@@ -36,6 +38,17 @@ class Graph:
 
     def get_vertices(self):
         return list(self.vertices.keys())
+
+    def __hash__(self):
+        # get a list of the vertices
+        listOfVerticies = []
+        for v in self.vertices.keys():
+            listOfVerticies.append(v)
+
+        # change the list of verticies to a tuple
+        t = tuple(listOfVerticies)
+
+        return hash(t)
 
 
 

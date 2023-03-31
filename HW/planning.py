@@ -482,6 +482,124 @@ class Planning:
 
         return self.graph
 
+    def getRandomPointNoGoal(self, obstacles):
+
+        # get a random x value
+        x = self.getRandomNumber(self.xmin * 100, self.xmax * 100)
+        xvalue = x / 100
+
+        # get a random y value
+        y = self.getRandomNumber(self.ymin * 100, self.ymax * 100)
+        yvalue = y / 100
+
+        # make a new vertex
+        vertex = Vertex(xvalue, yvalue)
+
+        isInObstacle = False
+
+        #check to see if it is in an obstacle
+        for obstacle in obstacles:
+            if obstacle.contains(vertex):
+                isInObstacle = True
+
+        while isInObstacle == True:
+            # get a random x value
+            x = self.getRandomNumber(self.xmin * 100, self.xmax * 100)
+            xvalue = x / 100
+
+            # get a random y value
+            y = self.getRandomNumber(self.ymin * 100, self.ymax * 100)
+            yvalue = y / 100
+
+            # make a new vertex
+            vertex = Vertex(xvalue, yvalue)
+
+            isInObstacle = False
+
+            # check to see if it is in an obstacle
+            for obstacle in obstacles:
+                if obstacle.contains(vertex):
+                    isInObstacle = True
+
+        return vertex
+
+    def combineGraphs(self, graph1:Graph, graph2:Graph):
+        returnGraph = Graph()
+
+        # TODO: what if our graph has no edges, our start or end graphs
+
+        # add all the edges of the graphs
+        # this will also add all the verticies
+        for e in graph1.get_edges():
+            returnGraph.add_edge(e)
+        for e in graph2.get_edges():
+            returnGraph.add_edge(e)
+
+        return returnGraph
+
+    def findClosestNeighbor(self, randomVertex, setOfComponents):
+        shortestDist = float('inf')
+        closestVertex = None
+
+        for graph in setOfComponents:
+            for vertex in graph.get_vertices():
+                dist = Geometry.getEuclideanDistance(randomVertex, vertex)
+                if dist < shortestDist:
+                    closestVertex = vertex
+
+        return closestVertex
+
     def PRM(self):
         # TODO: implement PRM in planning class
-        raise NotImplementedError
+        # raise NotImplementedError
+        setOfComponents = set()
+        closestNeighborGoal = 15
+
+        # G.init();i ← 0;
+        # initialize our start and end points as a graph
+        startGraph = Graph()
+        startGraph.add_vertex(self.start)
+        setOfComponents.add(startGraph)
+
+        endGraph = Graph()
+        endGraph.add_vertex(endGraph)
+        setOfComponents.add(startGraph)
+
+        for i in range(100):
+            # choose a random point that is not in an obstacle
+            randomVertex = self.getRandomPointNoGoal(self.obstacles)
+
+            numberOfConnectedNeighbors = 0
+            setOfGraphsWeAreConnectingTo = set()
+            while numberOfConnectedNeighbors < 15:
+                # find the closest neighbor
+                closestNeighbor = self.findClosestNeighbor(randomVertex, setOfComponents)
+                # get the closest graph
+                closestGraph = closestNeighbor.connectedComponent
+                # add a new edge to the existing graph
+                edge = Edge(randomVertex, closestNeighbor)
+                # check to see if we haven't hit an obstacle
+
+                closestGraph.add_edge()
+                # increment
+                numberOfConnectedNeighbors = numberOfConnectedNeighbors + 1
+
+                #check to see if we need to connect graphs
+
+
+
+
+
+
+
+
+
+
+
+        # add this to our graph
+        # while i < N
+        #     if α(i) ∈ Cfree then
+        #         G.add vertex(α(i)); i ← i + 1;
+        #         for each q ∈ neighborhood(α(i),G)
+        #             if ((not G.same component(α(i), q)) and connect(α(i), q)) then
+        #                 G.add edge(α(i), q);

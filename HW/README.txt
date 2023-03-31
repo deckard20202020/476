@@ -22,6 +22,6 @@ If you would like to increase the precision this can be done by altering the get
 
 For path finding, when I split eges, I keep the super edge in my graph.
 This means it might appear that certain points along the path are skipped.
-This should not be a concern as the path is still valid.  
+This should not be a concern as the path is still valid.
 
 Let me know if you have any issues or questions.

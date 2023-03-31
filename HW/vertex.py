@@ -4,6 +4,7 @@ class Vertex:
         self._x = x
         self._y = y
         self._parent = parent
+        self.connectedComponent = None
 
     def __eq__(self, other):
         if isinstance(other, Vertex):
