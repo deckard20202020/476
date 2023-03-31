@@ -17,6 +17,8 @@ class Geometry:
         line = LineString([p1, p2])
         closestPoint = line.interpolate(line.project(p3))
 
+        # TODO: parent
+        # I think this is done
         #convert to a vertex with parent
         closestVertex = Vertex(closestPoint.x, closestPoint.y, vertex1)
 
@@ -66,6 +68,7 @@ class Geometry:
                 if (distance < shortestDistance):
                     shortestDistance = distance
                     closestEdge = edge
-
+        # reverse the closest edge
+        # closestEdge = closestEdge.reverse()
         return closestEdge
 

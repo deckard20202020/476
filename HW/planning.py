@@ -123,9 +123,12 @@ class Planning:
                         # update our closest vertex and keep going
                         closestVertex = vertex
                     else:
-                        # update the parent of the closest Vertes
-                        closestVertex._parent = edge.vertex1
+                        # TODO: parents
+                        # I think this is fixed
                         # otherwise stop and return our closest vertex so far
+                        # update the parent of the closest Vertex
+                        closestVertex._parent = edge.vertex1
+                        # closestVertex.setParent(edge.vertex1)
                         return closestVertex
 
                 return closestVertex
@@ -177,6 +180,8 @@ class Planning:
     def connect(self, vertex1, vertex2):
         # connects two points after we find them with RRT or PRM
 
+        # TODO: parents
+        # I think this is done
         # make a vertex3 using the points of vertex2 and assigning its parent as vertex 1
         vertex2WithParent = Vertex(vertex2._x, vertex2._y, vertex1)
 
@@ -313,9 +318,6 @@ class Planning:
             # add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
 
-            #reassign ai
-            ai = closestPointToObstacle
-            
         else:
             # otherwise just add the edge to our graph
             self.connect(edge.vertex1, edge.vertex2)
@@ -401,6 +403,8 @@ class Planning:
 
         # the first time around we don't have any edges so we need to add one.
         ai = self.getRandomPoint()
+        # add the parent to ai
+        ai = Vertex(ai._x, ai._y, self.start)
 
         edge = Edge(self.start, ai)
 
@@ -450,9 +454,7 @@ class Planning:
                 closestPointToObstacle = collision_checker.findClosestVertexToObstacle(edge, self.obstacles)
 
                 #reassign our random point
-                ai = closestPointToObstacle
-
-                # self.findClosestEdgeAndSplit(ai)
+                ai = Vertex(closestPointToObstacle._x, closestPointToObstacle._y, closestPointOnEdge)
 
                 # find the closest edge on the graph
                 closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
@@ -473,11 +475,12 @@ class Planning:
 
             else: # we are not in collision with our new edge
 
-                # find the closest edge on the graph
-                closestEdge = Geometry.findClosestEdgeOnGraph(self.graph, ai, self.stepSize)
-
-                # find the closest point on the edge sending the step size
-                closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+                # # add this point to our graph
+                # self.graph.add_vertex(closestPointOnEdge)
+                #
+                # # add ai to the graph with it's parent
+                # ai = Vertex(ai._x, ai._y, closestPointOnEdge)
+                # self.graph.add_vertex(ai)
 
                 # split the edge
                 splitEdges = closestEdge.split(closestPointOnEdge)
@@ -493,12 +496,6 @@ class Planning:
             # Check to see if we have found the goal
             if ai == self.goal:
                 break
-
-        numberOfEdges = len(self.graph.get_edges())
-        numberOfVertices = len(self.graph.get_vertices())
-        if numberOfEdges <= 3 or numberOfVertices <= 4:
-            #pause here
-            a = 1
 
         return self.graph
 

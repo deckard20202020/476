@@ -15,6 +15,82 @@ def makeAVertex(x, y, p):
     v = Vertex(x, y, p)
     return v
 
+def printResultsWithPath(xmin, xmax, ymin, ymax, graph, start, goal, dt):
+    # fig = plt.figure(figsize=(60, 10))
+    # fix, ax = plt.subplots(figsize=(60,10))
+
+
+    # set up the circle parameters
+    circle1_center = [0, 1]
+    circle2_center = [0, -1]
+    circle_radius = 1 - dt
+
+    # set up the x and y values for the circles
+    t = np.linspace(0, np.pi, 1000)
+    x1 = circle1_center[0] + circle_radius * np.cos(t)
+    y1 = circle1_center[1] + circle_radius * -np.sin(t)
+    x2 = circle2_center[0] + circle_radius * np.cos(t)
+    y2 = circle2_center[1] + circle_radius * np.sin(t)
+
+    # create the plot
+    fig, ax = plt.subplots()
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([ymin, ymax])
+
+    # plot the circles
+    ax.plot(x1, y1, color='red')
+    ax.plot(x2, y2, color='red')
+
+    # plot each vertex
+    for v in graph.get_vertices():
+        x1 = v._x
+        y1 = v._y
+        if v == goal:
+            ax.plot(x1, y1, 'bx')
+        elif v == start:
+            ax.plot(x1, y1, 'bo')
+        else:
+            ax.plot(x1, y1, 'ko')
+
+    # make sure to plot the goal
+    # used for testing while reducing dt down to 0
+    ax.plot(goal._x, goal._y, 'bx')
+
+    # plot all the edges
+    for e in graph.get_edges():
+        first = [e.vertex1._x, e.vertex2._x]
+        second = [e.vertex1._y, e.vertex2._y]
+        ax.plot(first, second, color='k')
+
+    # plot the path
+    # find the goal in the graph
+    goalVertex = None
+    for v in graph.get_vertices():
+        if v == goal:
+            goalVertex = v
+            break
+
+    if goalVertex == None or goalVertex._parent == None:
+        # pause here
+        a = 1
+    else:
+        while goalVertex._parent is not None:
+            #make the goalVertex a blue circle
+            x1 = goalVertex._x
+            y1 = goalVertex._y
+            ax.plot(x1, y1, 'bo')
+
+            # plot the edge in blue
+            edge = Edge(goalVertex, goalVertex._parent)
+            first = [edge.vertex1._x, edge.vertex2._x]
+            second = [edge.vertex1._y, edge.vertex2._y]
+            ax.plot(first, second, color='b')
+
+            # reassign the goalVertex
+            goalVertex = goalVertex._parent
+
+    plt.show()
+
 if __name__ == "__main__":
     # vertex1 = makeAVertex(0, 0, None)
     # vertex2 = makeAVertex(0, 1, vertex1)
@@ -240,17 +316,68 @@ if __name__ == "__main__":
     xmax = 3
     ymin = -1
     ymax = 1
-    start = Vertex(-3, -1)
-    goal = Vertex(-1, -1)
+    start = Vertex(-3, 0.9)
+    goal = Vertex(-1.1, 0)
     stepSize = .1
     dt = .1
 
     planning = Planning(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
     collisionChecker = planning.collisionChecker.obstacleCollisionChecker(planning.obstacles, planning.stepSize)
-    ai = Vertex(-2.5, -.5)
-    edge = Edge(start, ai)
-    planning.connect(edge.vertex1, edge.vertex2)
 
+    #adding first edge
+    firstVertex = Vertex(-1, 1, start)
+    planning.graph.add_vertex(firstVertex)
+    firstEdge = Edge(start, firstVertex)
+    planning.connect(firstEdge.vertex1, firstEdge.vertex2)
+
+    #adding second edge
+    ai = Vertex(-2, -1)
+    closestEdge = Geometry.findClosestEdgeOnGraph(planning.graph, ai, stepSize)
+    closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+    ai = Vertex(ai._x, ai._y, closestPointOnEdge)
+    splitEdges = closestEdge.split(closestPointOnEdge)
+    for e in splitEdges:
+        planning.connect(e.vertex1, e.vertex2)
+    secondEdge = Edge(closestPointOnEdge, ai)
+    planning.connect(secondEdge.vertex1, secondEdge.vertex2)
+
+    # #adding third edge
+    # ai = Vertex(2, 0)
+    # closestEdge = Geometry.findClosestEdgeOnGraph(planning.graph, ai, stepSize)
+    # closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+    # ai = Vertex(ai._x, ai._y, closestPointOnEdge)
+    # splitEdges = closestEdge.split(closestPointOnEdge)
+    # for e in splitEdges:
+    #     planning.connect(e.vertex1, e.vertex2)
+    # thirdEdge = Edge(closestPointOnEdge, ai)
+    # planning.connect(thirdEdge.vertex1, thirdEdge.vertex2)
+    #
+    # #adding fourth edge
+    # ai = Vertex(1.5, -1)
+    # closestEdge = Geometry.findClosestEdgeOnGraph(planning.graph, ai, stepSize)
+    # closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+    # ai = Vertex(ai._x, ai._y, closestPointOnEdge)
+    # splitEdges = closestEdge.split(closestPointOnEdge)
+    # for e in splitEdges:
+    #     planning.connect(e.vertex1, e.vertex2)
+    # fourthEdge = Edge(closestPointOnEdge, ai)
+    # planning.connect(fourthEdge.vertex1, fourthEdge.vertex2)
+
+    # add goal
+    ai = goal
+    closestEdge = Geometry.findClosestEdgeOnGraph(planning.graph, ai, stepSize)
+    closestPointOnEdge = Geometry.getNearestVertexOnLine(closestEdge.vertex1, closestEdge.vertex2, ai)
+    ai = Vertex(ai._x, ai._y, closestPointOnEdge)
+    splitEdges = closestEdge.split(closestPointOnEdge)
+    for e in splitEdges:
+        planning.connect(e.vertex1, e.vertex2)
+    # should these be flipped?
+    planning.graph.add_vertex(ai)
+    fifthEdge = Edge(closestPointOnEdge, ai)
+    planning.connect(fifthEdge.vertex1, fifthEdge.vertex2)
+
+    printResultsWithPath(xmin, xmax, ymin, ymax, planning.graph, start, goal, dt)
+    a = 1
 
 
 

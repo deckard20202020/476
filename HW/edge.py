@@ -74,25 +74,19 @@ class Edge:
     def split(self, midVertex):
 
         # TODO: is my parent problem here???
+        # I think this is fixed
+
         # vertex1 should already have a parent
 
         # make the parent of the midpoint the first vertex
         midVertex = Vertex(midVertex._x, midVertex._y, self.vertex1)
 
         # make the parent of vertex2 the midpoint
-        rightVertex = Vertex(self.vertex1, self.vertex2, midVertex)
+        rightVertex = Vertex(self.vertex2._x, self.vertex2._y, midVertex)
 
         # make two new edges
-        # firstEdge = Edge(self.vertex1, midVertex)
-        # secondEdge = Edge(midVertex, self.vertex2)
         firstEdge = Edge(self.vertex1, midVertex)
-        secondEdge = Edge(midVertex, self.vertex2)
-
-        # TODO: when you use split in algorigthm
-        # add those two edges to the graph
-        # first edge has the parent of the original edge
-        # second edge has the first edge as a parent
-        # should we remove the old edge and create two new edges with the 3 points or just add the new edges???
+        secondEdge = Edge(midVertex, rightVertex)
 
         return [firstEdge, secondEdge]
 
