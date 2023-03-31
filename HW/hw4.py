@@ -195,27 +195,29 @@ def main_prm():
     raise NotImplementedError
 
 if __name__ == "__main__":
-    # input is just the algorithm RRT or PRM
-    # output should be the picture
+    # min and max of world coordinates
     xmin = -3
     xmax = 3
     ymin = -1
     ymax = 1
+    # start and goal points
     start = Vertex(-2, -0.5)
     goal = Vertex(2, -0.5)
+    # used for collision checking
     stepSize = .1
+    # radius of circles is 1 - dt
     dt = .1
 
-    for i in range(10):
-        explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-        printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
+    # for i in range(10):
+    explorationGraphWithoutCollision = main_rrtExplorationWithoutCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResults(xmin, xmax, ymin, ymax, explorationGraphWithoutCollision, start, goal, dt)
 
     # for i in range(10):
-    #     explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    #     printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
+    explorationGraphWithCollision = main_rrtExplorationWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResults(xmin, xmax, ymin, ymax, explorationGraphWithCollision, start, goal, dt)
 
     # for i in range(30):
-    #     pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
-    #     printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
+    pathFindingWithCollision = main_rrtPathFindingWithCollision(xmin, xmax, ymin, ymax, start, goal, stepSize, dt)
+    printResultsWithPath(xmin, xmax, ymin, ymax, pathFindingWithCollision, start, goal, dt)
 
     # just run all three.
