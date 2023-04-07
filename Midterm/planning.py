@@ -1,5 +1,8 @@
 import random
 import numpy as np
+from shapely.geometry.polygon import Polygon, Point
+
+from Midterm.chain_plotter import get_link_positions
 from graph import Tree, GraphCC
 from edge import EdgeStraight
 from geometry import get_euclidean_distance
@@ -81,6 +84,66 @@ class ObstacleCollisionChecker(CollisionChecker):
         """Return whether collision needs to be checked at all"""
         return True
 
+##############################################################################
+# Polygon Collision Checker
+##############################################################################
+class PolygonCollisionChecker(CollisionChecker):
+    def __init__(self, W, L, D, obstacles):
+        """The constructor
+
+        @type obstacles: a list [obs_1, ..., obs_m] of obstacles, where obs_i is an Obstacle
+            object that include a contain(s) function, which returns whether a state s
+            is inside the obstacle
+        """
+        self.W = W
+        self.L = L
+        self.D = D
+        self.obstacles = obstacles
+
+    def is_in_collision(self, s):
+        """Return whether the point s is in collision with the obstacles"""
+        # this point will be a theta1 and theta2
+        # translate this point into links
+
+        # make a polygon out of link 1
+
+        # return: a tuple(joint_positions, link_vertices)
+        # where *joint_positions is a list[p_1, ..., p_{m + 1}] where p_i is the position[x, y] of the joint between A_i and A_ {i - 1}
+        # *link_vertices is a list[V_1, ..., V_m] where V_i is the list of[x, y] positions of vertices of A_i
+        jointAndLinkPositions = get_link_positions(s, self.W, self.L, self.D)
+        linkPositions = jointAndLinkPositions[1]
+
+        # make a polygon out of link 1
+        vertex1 = linkPositions[0][0]
+        vertex2 = linkPositions[0][1]
+        vertex3 = linkPositions[0][2]
+        vertex4 = linkPositions[0][3]
+        link1 = Polygon([vertex1, vertex2, vertex3, vertex4])
+
+        # check to see if any obstacles intersect link1
+        for obs in self.obstacles:
+            obstaclePolygon = Polygon(obs.listOfVertices)
+            if link1.intersects(obstaclePolygon):
+                return True
+
+        # make a polygon out of link 2
+        vertex1 = linkPositions[0][0]
+        vertex2 = linkPositions[0][1]
+        vertex3 = linkPositions[0][2]
+        vertex4 = linkPositions[0][3]
+        link2 = Polygon([vertex1, vertex2, vertex3, vertex4])
+
+        # check to see if link2 intersect the obstacles
+        for obs in self.obstacles:
+            obstaclePolygon = Polygon(obs.listOfVertices)
+            if link2.intersects(obstaclePolygon):
+                return True
+
+        return False
+
+    def is_checking_required(self):
+        """Return whether collision needs to be checked at all"""
+        return True
 
 ##############################################################################
 # Planning algorithms

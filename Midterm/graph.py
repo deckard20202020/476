@@ -1,6 +1,6 @@
 import math, copy
 from heapq import heappush
-from queue import QueueAstar
+from midtermqueue import QueueAstar
 
 
 class Graph:

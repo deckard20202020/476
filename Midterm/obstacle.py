@@ -1,10 +1,78 @@
 import math
+
+from shapely.geometry import Polygon, Point
+
 from geometry import is_inside_circle
 
 
 class Obstacle:
     def contain(self, s):
         return False
+
+class PolygonObstacle(Obstacle):
+    """A class representing a polygon obstacle"""
+
+    # def __int__(self, vertex1, vertex2, vertex3, vertex4):
+    #     self.vertex1 = vertex1
+    #     self.vertex2 = vertex2
+    #     self.vertex3 = vertex3
+    #     self.vertex4 = vertex4
+
+    def __init__(self, listOfVertices):
+        self.listOfVertices = listOfVertices
+
+    def get_list_of_vertices(self):
+        return self.listOfVertices
+
+    def contain(self, v):
+        # Create a list of (x, y) tuples from the input vertices
+        coordinates = [(x, y) for x, y in self.listOfVertices]
+
+        # Create a Polygon object from the list of coordinates
+        polygon = Polygon(coordinates)
+
+        # Create a Point object from the input vertex
+        point = Point(v)
+
+        # Check if the polygon contains the point
+        return polygon.contains(point)
+
+    # def contain(self, v):
+    #     """Return whether a point s is inside this obstacle"""
+    #     """Determine whether v is in the polygon with the given vertices (assumed to be given in the CC order)
+    #
+    #     @type v: a tuple (x, y)
+    #     @type vertices: a list [p1, ..., p_{m+1}] where p_i is the position (x,y) of the i^{th} vertex.
+    #     """
+        # vertices = [self.vertex1, self.vertex2, self.vertex3, self.vertex4]
+        #
+        # for i in range(len(vertices)):
+        #     v1 = vertices[i]
+        #     v2 = vertices[0]
+        #     if i + 1 < len(vertices):
+        #         v2 = vertices[i + 1]
+        #     if not self.is_in_half_space(v, v1, v2):
+        #         return False
+        # return True
+
+    # def is_in_half_space(v, v1, v2):
+    #     """Determine whether v is in the half space to the left of the vector from v1 to v2
+    #
+    #     @type v, v1, v2: a tuple (x, y) that indicates the x and y coordinates of the corresponding points.
+    #
+    #     """
+    #     x = v[0]
+    #     y = v[1]
+    #     x1 = v1[0]
+    #     y1 = v1[1]
+    #     x2 = v2[0]
+    #     y2 = v2[1]
+    #
+    #     a = y2 - y1
+    #     b = x1 - x2
+    #     c = x2 * y1 - x1 * y2
+    #
+    #     return a * x + b * y + c <= 0
 
 
 class CircularObstacle(Obstacle):
@@ -59,4 +127,11 @@ def construct_circular_obstacles(dt):
     obstacles = []
     for i in range(len(c)):
         obstacles.append(CircularObstacle(c[i], r, t[i]))
+    return obstacles
+
+def construct_polygon_obstacles(listOfObstacleVerticies):
+    obstacles = []
+    for list in listOfObstacleVerticies:
+        obstacle = PolygonObstacle(list)
+        obstacles.append(obstacle)
     return obstacles
