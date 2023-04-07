@@ -121,20 +121,82 @@ if __name__ == "__main__":
     collision_checker = PolygonCollisionChecker(W, L, D, obstacles)
 
 
-    for i in range(10):
-        title3 = "RRT planning"
-        (G3, root3, goal3) = rrt(
-            cspace=cspace,
-            qI=xI,
-            qG=xG,
-            edge_creator=edge_creator,
-            distance_computator=distance_computator,
-            collision_checker=collision_checker,
-        )
-        path = []
-        fig,ax=plt.subplots()
-        if goal3 is not None:
-            path = G3.get_path(root3, goal3)
-        draw(ax, cspace, O, xI, xG, G3, path, title3)
+    # for i in range(10):
+    title3 = "RRT planning"
+    (G3, root3, goal3) = rrt(
+        cspace=cspace,
+        qI=xI,
+        qG=xG,
+        edge_creator=edge_creator,
+        distance_computator=distance_computator,
+        collision_checker=collision_checker,
+    )
+    path = []
+    fig,ax=plt.subplots()
+    if goal3 is not None:
+        path = G3.get_path(root3, goal3)
+    draw(ax, cspace, O, xI, xG, G3, path, title3)
 
-        plt.show()
+    plt.show()
+
+    # output results to output file
+    #my tree is called G3
+
+    #all the vertices
+    # "vertices": [{"id": 0, "config": [1.0471975511965976, 0.5235987755982988]}, ...
+    # list of dictionaries with 2 keys
+    vertexList = []
+    for v in G3.vertices:
+        vertexDictionary = {}
+        vertexDictionary["id"] = v
+        vertexDictionary["config"] = [G3.vertices[v][0], G3.vertices[v][1]]
+        vertexList.append(vertexDictionary)
+
+    #all the edges
+    edgesList = []
+    # "edges": [[0, 2], [2, 1], ...
+    for e in G3.edges:
+        # make a list from the tuple
+        list = []
+        list.append(e[0])
+        list.append(e[1])
+        edgesList.append(list)
+
+    # create the path if there is one
+    # "path": [0, 2, 4, 10, 11, 13]
+    # don't forget to add them backwards
+    path = []
+
+    goalVertex = -1
+    # find the goal vertex
+    for v in G3.vertices.items():
+        # returns list of (key,value)
+        if v[1][0] == xG[0] and v[1][1] == xG[1]:
+            goalVertex = v[1]
+            indexOfGoalVertex = v[0]
+            path.append(indexOfGoalVertex)
+
+    # if we have found a goal
+    if len(path) > 0:
+        currentVertexIndex = path[0]
+        lengthOfParents = len(G3.parents[currentVertexIndex])
+        while lengthOfParents > 0:
+            #find the parent
+            parent = G3.parents[currentVertexIndex][0]
+            path.insert(0, parent)
+            currentVertexIndex = parent
+            lengthOfParents = len(G3.parents[currentVertexIndex])
+
+    # taken from https://www.geeksforgeeks.org/reading-and-writing-json-to-a-file-in-python/#
+    outputInfo = {
+        "vertices": vertexList,
+        "edges": edgesList,
+        "path": path
+    }
+
+    # Serializing json
+    json_object = json.dumps(outputInfo, indent=4)
+
+    # Writing to sample.json
+    with open("midterm_out.json", "w") as outfile:
+        outfile.write(json_object)
