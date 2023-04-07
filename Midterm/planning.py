@@ -127,10 +127,10 @@ class PolygonCollisionChecker(CollisionChecker):
                 return True
 
         # make a polygon out of link 2
-        vertex1 = linkPositions[0][0]
-        vertex2 = linkPositions[0][1]
-        vertex3 = linkPositions[0][2]
-        vertex4 = linkPositions[0][3]
+        vertex1 = linkPositions[1][0]
+        vertex2 = linkPositions[1][1]
+        vertex3 = linkPositions[1][2]
+        vertex4 = linkPositions[1][3]
         link2 = Polygon([vertex1, vertex2, vertex3, vertex4])
 
         # check to see if link2 intersect the obstacles

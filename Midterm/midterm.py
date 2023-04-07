@@ -121,7 +121,7 @@ if __name__ == "__main__":
     collision_checker = PolygonCollisionChecker(W, L, D, obstacles)
 
 
-    for i in range(5):
+    for i in range(10):
         title3 = "RRT planning"
         (G3, root3, goal3) = rrt(
             cspace=cspace,
