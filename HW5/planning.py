@@ -36,6 +36,12 @@ class EuclideanDistanceComputator(DistanceComputator):
         """Return the Euclidean distance between s1 and s2"""
         return get_euclidean_distance(s1, s2)
 
+class DubinsDistanceComputator(DistanceComputator):
+    def get_distance(self, s1, s2):
+        """Return the Euclidean distance between s1 and s2"""
+        #TODO: need to make a new distance calculator.
+        return get_euclidean_distance(s1, s2)
+
 
 ##############################################################################
 # Classes for collision checking
@@ -75,6 +81,9 @@ class ObstacleCollisionChecker(CollisionChecker):
         for obs in self.obstacles:
             if obs.contain(s):
                 return True
+
+        # check to see if we are inside the world boundaries
+        # i dont think we have to do this as our world boundary is already appended to our obstacles
         return False
 
     def is_checking_required(self):

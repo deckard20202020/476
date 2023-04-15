@@ -1,12 +1,13 @@
 import sys, argparse
 import matplotlib.pyplot as plt
+import numpy
 from planning import (
     rrt,
     prm,
     StraightEdgeCreator,
     EuclideanDistanceComputator,
     EmptyCollisionChecker,
-    ObstacleCollisionChecker,
+    ObstacleCollisionChecker, DubinsDistanceComputator,
 )
 from obstacle import construct_circular_obstacles, WorldBoundary2D
 from draw_cspace import draw
@@ -104,8 +105,12 @@ def main_prm(
 
 if __name__ == "__main__":
     cspace = [(-3, 3), (-1, 1)]
-    qI = (-2, -0.5)
-    qG = (2, -0.5)
+    world = [(-3, 3), (-1, 1)]
+    # i think theta should be in radians
+    thetaG_deg = 90
+    thetaG_rad = numpy.deg2rad(thetaG_deg)
+    qI = (-2, -0.5, 0)
+    qG = (2, -0.5, thetaG_rad)
     obstacles = construct_circular_obstacles(0.02)
     obs_boundaries = [obstacle.get_boundaries() for obstacle in obstacles]
 
@@ -117,9 +122,11 @@ if __name__ == "__main__":
     world_boundary = WorldBoundary2D(cspace[0], cspace[1])
     obstacles.append(world_boundary)
 
+    # need to change this, we will have curved edges
     edge_creator = StraightEdgeCreator(0.1)
     collision_checker = ObstacleCollisionChecker(obstacles)
-    distance_computator = EuclideanDistanceComputator()
+    # distance_computator = EuclideanDistanceComputator()
+    distance_computator = DubinsDistanceComputator()
 
     args = parse_args()
 
